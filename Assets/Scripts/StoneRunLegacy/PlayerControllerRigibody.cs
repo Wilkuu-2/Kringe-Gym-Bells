@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Cinemachine;
 
 
 namespace SRLegacy {
@@ -11,13 +10,14 @@ namespace SRLegacy {
         public LayerMask  groundLayer;
         public LayerMask  ceilCheckLayer;
         public ObstacleDetector detection; 
+        
+        public bool animate = true;
+
         [Header("Camera")]
         public GameObject camera;
 
-
         public MovementClass movement; 
         public InputValuesClass input;
-
 
         public float slideDrag = 0.1f;
         public float slideMinVel = 0.5f; 
@@ -79,13 +79,13 @@ namespace SRLegacy {
         }
         // Update is called once per frame
         void Update(){
-            if(s_onWall){
+            /*if(s_onWall){
                 walkSounds.setTempo(WALK_TEMPO_STATE.WALL);
             } else if(in_isSprinting){
                 walkSounds.setTempo(WALK_TEMPO_STATE.RUN);
             } else {
                 walkSounds.setTempo(WALK_TEMPO_STATE.WALK);
-            }
+            }*/
             
             updateAnimator();
 
@@ -93,6 +93,7 @@ namespace SRLegacy {
         }
         
         void updateAnimator(){
+           if (animate) { 
            hb_anim.SetBool("a_isSliding", s_isSliding);
            hb_anim.SetBool("a_isWalking", in_walk != Vector2.zero);
            hb_anim.SetBool("a_isGrounded", s_isGrounded);
@@ -100,6 +101,7 @@ namespace SRLegacy {
            if(s_isGrounded && !s_wasGrounded)
                 hb_anim.SetTrigger("a_tLand");
            hb_anim.SetFloat("a_WalkSpeed", in_isSprinting ? 0.6f : 1.2f);
+            }
         }
 
 #region physics 
@@ -211,7 +213,7 @@ namespace SRLegacy {
             
             if(s_isSliding && rb.velocity.magnitude < slideMinVel)
             {
-                OnSlideFinish();
+                OnSlideEnd();
             }
 
             
@@ -220,7 +222,7 @@ namespace SRLegacy {
             rb.angularVelocity = Vector3.zero;
             
             // Enable/Disable walking sound
-            walkSounds.setPlaying(s_isGrounded && in_walk != Vector2.zero);
+            //walkSounds.setPlaying(s_isGrounded && in_walk != Vector2.zero);
       
             
             // Save previous grounded state
@@ -250,9 +252,9 @@ namespace SRLegacy {
                 movement.jump.onFall();
             } 
             
-            if(!s_isGrounded){
-                walkSounds.setPlaying(false);
-            }
+            //if(!s_isGrounded){
+            //    walkSounds.setPlaying(false);
+            // }
             
             
             return s_isGrounded;
@@ -290,7 +292,7 @@ namespace SRLegacy {
             s_onWall = true;
             s_isGrounded = false; 
             s_isJumping  = false; 
-            walkSounds.setPlaying(true);
+            //walkSounds.setPlaying(true);
         }
         void WallRunUpdate(){
             rb.AddForce(-transform.up * rb.velocity.y * movement.wall.friction * Time.deltaTime);
@@ -365,7 +367,7 @@ namespace SRLegacy {
             in_isSprinting = true;
         }
         
-        void OnSprintFinish(){
+        void OnSprintEnd(){
             in_isSprinting = false;
         } 
         
@@ -376,14 +378,14 @@ namespace SRLegacy {
             }
         }
         
-        void OnSlideFinish(){
+        void OnSlideEnd(){
             if(!s_isCloseToCeiling){
                 s_isSliding = false;
                 hb_anim.SetBool("a_isSliding" ,false);
             }
         }
 
-        void OnJump(){
+        void OnJumpStart(){
             if(s_onWall){
                 if(detection[DIR.LEFT] == true){
                     rb.AddForce((detection[DIR.LEFT].getNormal() + transform.up)*movement.wall.jumpVelocity/2 * rb.mass,ForceMode.Impulse);

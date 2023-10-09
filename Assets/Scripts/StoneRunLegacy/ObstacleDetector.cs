@@ -1,7 +1,5 @@
 using UnityEngine;
 
-
-
 namespace SRLegacy{
     public enum DIR{
         UP,
