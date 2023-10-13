@@ -311,7 +311,7 @@
                 {
                     "name": "",
                     "id": "b2d11452-db2b-4b47-a871-3575dd06b7c1",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -322,7 +322,7 @@
                 {
                     "name": "",
                     "id": "e59b29f9-5bbe-401d-931c-5e32ca340af3",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",

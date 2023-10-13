@@ -263,19 +263,19 @@ namespace SRLegacy {
 
         void applyFloatSpring(){
                 if(!s_isJumping){
-                var newY = detection[DIR.DOWN].getPoint().y + floatHeight + col.bounds.extents.y;
-                var difference = newY - transform.position.y;
-                var springForce = floatSpring* difference; 
-                var dampingForce= floatDamping* -Mathf.Clamp(rb.velocity.y,-floatDampingClamp,floatDampingClamp);
-                rb.AddForce(Vector3.up * (springForce + dampingForce) * Time.deltaTime);
+                    var newY = detection[DIR.DOWN].getPoint().y + floatHeight + col.bounds.extents.y;
+                    var difference = newY - transform.position.y;
+                    var springForce = floatSpring* difference; 
+                    var dampingForce= floatDamping* -Mathf.Clamp(rb.velocity.y,-floatDampingClamp,floatDampingClamp);
+                    rb.AddForce(Vector3.up * (springForce + dampingForce) * Time.deltaTime);
                
-                if(!s_isSliding){
-                rb.velocity = new Vector3(rb.velocity.x,
-                                         Mathf.Clamp(rb.velocity.y,-maxVerticalVelocityOnGround, maxVerticalVelocityOnGround),
-                                         rb.velocity.z);
-               
+                    if(!s_isSliding){
+                        rb.velocity = new Vector3(rb.velocity.x,
+                                                 Mathf.Clamp(rb.velocity.y,-maxVerticalVelocityOnGround, maxVerticalVelocityOnGround),
+                                                 rb.velocity.z);
+                       
 
-                    }
+                        }
                 }
         }
 
