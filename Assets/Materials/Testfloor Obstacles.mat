@@ -59,4 +59,5 @@ Material:
     m_Colors:
     - _Dark: {r: 0, g: 0.18149322, b: 0.1409307, a: 1}
     - _Light: {r: 1, g: 0, b: 0.908308, a: 1}
+    - _Mortar: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

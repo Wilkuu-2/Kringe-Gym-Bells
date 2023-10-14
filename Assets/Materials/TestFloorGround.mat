@@ -38,7 +38,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Frequency: 0.5
+    - _Frequency: 100
     - _Metallic: 0.2
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -48,6 +48,7 @@ Material:
     - _C2: {r: 0, g: 0, b: 0, a: 0}
     - _Dark: {r: 0, g: 0, b: 0, a: 1}
     - _Light: {r: 0.59162295, g: 0.46858874, b: 0.18228294, a: 1}
+    - _Mortar: {r: 0.26856333, g: 0.26856333, b: 0.26856333, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &8108727208540934975
 MonoBehaviour:

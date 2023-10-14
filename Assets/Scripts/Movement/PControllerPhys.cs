@@ -57,6 +57,7 @@ namespace Movement {
             col = GetComponent<Collider>();
             hb_anim = GetComponent<Animator>(); 
 
+            // TODO: Move somewhere else
             Cursor.lockState = CursorLockMode.Locked; 
         } 
         public void FixedUpdate() {
