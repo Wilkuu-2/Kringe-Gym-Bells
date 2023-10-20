@@ -30,7 +30,6 @@ public class CameraController : MonoBehaviour
     }
 
     public void OnLook(InputValue l) {
-        Debug.Log("OnLook");
         input = l.Get<Vector2>();
     } 
 
