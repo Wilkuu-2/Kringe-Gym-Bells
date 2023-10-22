@@ -512,9 +512,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &183023141
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -522,7 +522,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183023135}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 582c3805b424d22e1935c8821aabd9ad, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -558,10 +558,10 @@ MonoBehaviour:
     m_Bits: 4294967295
   detection: {fileID: 1314268298}
   viewCamera: {fileID: 330585546}
-  floatHeight: 0.9
+  floatHeight: 0.6
   floatSpringLength: 2
   floatSpring: 90000
-  floatDamping: 40000
+  floatDamping: 10000
   floatDampingClamp: 3
   maxVerticalVelocityOnGround: 3
   rotationSpeed: 3600
@@ -572,22 +572,23 @@ MonoBehaviour:
     jumpVelocity: 12
   o_walk:
     walkAcc: 900
-    runAcc: 1200
+    runAcc: 1000
     walkSpeedMax: 6
-    runSpeedMax: 12
+    runSpeedMax: 8
     slideDrag: 0.1
-    slideMinVel: 0.5
+    slideMinVel: 0.1
+    slideTurnForce: 50000
   o_air:
     maxInAirActions: 1
-    velocity: 4
+    velocity: 6
     dashVelocity: 10
-    inAirAcceleration: 50
-    inAirMaxAddedSpeed: 5
+    inAirAcceleration: 2
     allowForward: 0
+    auto_bhop: 1
     coyoteTime:
       maxDelay: 1
     jumpBuffering:
-      maxDelay: 1
+      maxDelay: 10
   state:
     mode:
       _current: 0
@@ -596,7 +597,7 @@ MonoBehaviour:
       _current: 0
       _previous: 0
     isGrounded:
-      _current: 0
+      _current: 1
       _previous: 0
     nearCeiling:
       _current: 0
@@ -1513,8 +1514,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: {x: 10, y: 0.1}
-  y_min: -3
-  y_max: 3
   parent: {fileID: 183023136}
   lookpoint: {fileID: 1487165723}
 --- !u!114 &888243121
@@ -2738,7 +2737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: -1, z: 0}
-  maxDist: 5
+  maxDist: 2
   mask:
     serializedVersion: 2
     m_Bits: 4294967295

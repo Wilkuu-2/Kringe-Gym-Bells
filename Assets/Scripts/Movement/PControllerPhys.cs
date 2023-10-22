@@ -6,29 +6,12 @@ namespace Movement {
 
     public class PlayerController: MonoBehaviour
     {
-        // Settings
-        public LayerMask groundMask; 
-        public LayerMask ceilingMask;
-
         public SRLegacy.ObstacleDetector detection;
 
         [Header("Camera")]
         public Transform viewCamera;
 
-        [Header("Floating")] 
-        [Tooltip("How high the collider hover above the ground ")] 
-        public float floatHeight   = 0.4f; 
-        public float floatSpringLength = 2; 
-        [Tooltip("Spring force coefficient for hovering")]
-        public float floatSpring   = 50000f; 
-        [Tooltip("Damping force coefficient for hovering ")]
-        public float floatDamping  = 1000f;  
-        [Tooltip("Max speed fed into the damping force")]
-        public float floatDampingClamp = 3f;
-        public float maxVerticalVelocityOnGround = 3f;
-
-        private float springNeutralPoint {get => col.bounds.extents.y + floatHeight;}
-        
+        private float springNeutralPoint {get => col.bounds.extents.y + o_spring.floatHeight;}
 
         [Range(60,3600)]
         [Tooltip("The speed at which the character rotates to the movement")]
@@ -37,6 +20,7 @@ namespace Movement {
 
         [Header("Settings")]
         // public SRLegacy.MovementClass movement; 
+        public SpringOptions o_spring;
         public WallClass o_wall;
         public GroundClass     o_walk;
         public AerialClass      o_air;
@@ -79,20 +63,20 @@ namespace Movement {
             lateralMovement();
 
             applyCharacterRotation();
+            // Bhopping 
+            if (state.mode.previous == MovementMode.AIR  
+                && state.mode.current == MovementMode.WALK 
+                && state.pressingJump
+                && o_air.auto_bhop){
+                o_air.jumpBuffering.Set();
+            }
 
-            if(state.isGrounded && o_air.jumpBuffering.Peek()) {
+            if(state.isGrounded.current && state.isGrounded.previous && o_air.jumpBuffering.Peek()) {
                 o_air.jumpBuffering.Consume(); 
                 Jump(false);
                 
             }
 
-            // Bhopping 
-            if (state.mode.previous == MovementMode.JUMP 
-                && state.mode.current == MovementMode.AIR 
-                && state.pressingJump
-                && o_air.auto_bhop){
-                o_air.jumpBuffering.Set();
-            }
         }
 
 
@@ -158,7 +142,7 @@ namespace Movement {
                 var diff    = targetY - transform.position.y;
                 
                 // If the spring is stretched too long, lose contact
-                if (diff < -floatSpringLength)
+                if (diff < -o_spring.floatSpringLength)
                     diff = 0; 
             
                 // Only use the spring when walking
@@ -171,8 +155,8 @@ namespace Movement {
                     }
                 
                     // Calculate spring-damper system 
-                    var dampingForce = rb.velocity.y * -floatDamping;
-                    var springForce = floatSpring * diff; 
+                    var dampingForce = rb.velocity.y * -o_spring.floatDamping;
+                    var springForce = o_spring.floatSpring * diff; 
 
                     // Add the sum of the two forces 
                     // TODO: Is the time.deltaTime really necessary? 
@@ -286,8 +270,6 @@ namespace Movement {
 
         } 
 
-        
-
         void applyCharacterRotation(){
             if (state.mode == MovementMode.SLIDE || in_walk.magnitude > 0){
                 // Rotate character
@@ -399,67 +381,5 @@ namespace Movement {
         JUMP,
         SLIDE,
         WALL, 
-    }
-
-
-    [System.Serializable]
-    public class GroundClass 
-    {
-        [Header("GroundMovement")]
-        [Tooltip("Acceleration for walking ")]
-        public float walkAcc = 900;
-        [Tooltip("Acceleration for running")]
-        public float runAcc  = 1200; 
-        [Tooltip("Max walking speed ")]
-        public float walkSpeedMax = 6; 
-        [Tooltip("Max sprinting speed ")]
-        public float runSpeedMax = 12; 
-
-        [Header("Slide")]
-        public float slideDrag = 0.1f;
-        public float slideMinVel = 0.5f; 
-        public float slideTurnForce = 60000f;
-
-    }
-
-    [System.Serializable]
-    public class AerialClass {
-        [Header("General")]
-        [Tooltip("How much double jumps or dashes can the charater do before having to land again ")]
-        public int   maxInAirActions = 1;  
-
-        [Tooltip("Upwards velocity which gets added to the current velocity when jumping ")]
-        public float velocity  = 9;  
-        [Tooltip("Forwards velocity which gets added to the current velocity when dashing ")]
-        public float dashVelocity  = 12; 
-
-        [Header("Strafing")]
-        [Tooltip("Acceleration that is applied in-air")]
-        public float inAirAcceleration = 1;
-        [Tooltip("Allow adding forward (or backward) movement in-air.\nDisable for Source-like strafing")]
-        public bool  allowForward = false; 
-        public bool  auto_bhop = true; 
-
-        #region  coyoteTime 
-        public TimeLimitedAction coyoteTime;
-        #endregion
-
-        #region buffering
-        public TimeLimitedAction jumpBuffering;
-        #endregion 
-
-    }
-
-    [System.Serializable]
-    public class WallClass
-    {
-        [Tooltip("Force which is applied while wallrunning")]
-        public float runForce = 10000; 
-        [Tooltip("Maximal speed while wallrunning ")]
-        public float maxSpeed = 10;    
-        [Tooltip("The vertical friction applied while wallrunning ")]
-        public float friction = 100f;  
-        [Tooltip("The jump velocity while bouncing off the wall")]
-        public float jumpVelocity = 12;  
     }
 }
