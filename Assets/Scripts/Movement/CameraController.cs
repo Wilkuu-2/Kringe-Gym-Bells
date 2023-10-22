@@ -32,11 +32,4 @@ public class CameraController : MonoBehaviour
 
     }
 
-//     public void OnLook(InputValue l) {
-//         input = l.Get<Vector2>();
-//         Debug.Log("OnLook: " + input);
-//         offset = transform.position - parent.transform.position; 
-//    } 
-
-
 }

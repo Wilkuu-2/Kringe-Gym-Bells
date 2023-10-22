@@ -6,29 +6,12 @@ namespace Movement {
 
     public class PlayerController: MonoBehaviour
     {
-        // Settings
-        public LayerMask groundMask; 
-        public LayerMask ceilingMask;
-
         public SRLegacy.ObstacleDetector detection;
 
         [Header("Camera")]
         public Transform viewCamera;
 
-        [Header("Floating")] 
-        [Tooltip("How high the collider hover above the ground ")] 
-        public float floatHeight   = 0.4f; 
-        public float floatSpringLength = 2; 
-        [Tooltip("Spring force coefficient for hovering")]
-        public float floatSpring   = 50000f; 
-        [Tooltip("Damping force coefficient for hovering ")]
-        public float floatDamping  = 1000f;  
-        [Tooltip("Max speed fed into the damping force")]
-        public float floatDampingClamp = 3f;
-        public float maxVerticalVelocityOnGround = 3f;
-
-        private float springNeutralPoint {get => col.bounds.extents.y + floatHeight;}
-        
+        private float springNeutralPoint {get => col.bounds.extents.y + o_spring.floatHeight;}
 
         [Range(60,3600)]
         [Tooltip("The speed at which the character rotates to the movement")]
@@ -37,6 +20,7 @@ namespace Movement {
 
         [Header("Settings")]
         // public SRLegacy.MovementClass movement; 
+        public SpringOptions o_spring;
         public WallClass o_wall;
         public GroundClass     o_walk;
         public AerialClass      o_air;
@@ -76,87 +60,116 @@ namespace Movement {
             //wallCheck();
             determineMode();
             
-            determineAccelerationAndDesiredSpeed(out float acc, out float desiredSpeed);
             applyFloatation();
-            applyLateralMovementForce(acc, desiredSpeed);
+            lateralMovement();
 
             applyCharacterRotation();
+            // Bhopping 
+            if (state.mode.previous == MovementMode.AIR  
+                && state.mode.current == MovementMode.WALK 
+                && state.pressingJump
+                && o_air.auto_bhop){
+                o_air.jumpBuffering.Set();
+            }
 
-            if(state.isGrounded && o_air.jumpBuffering.Peek()) {
+            if(state.isGrounded.current && state.isGrounded.previous && o_air.jumpBuffering.Peek()) {
                 o_air.jumpBuffering.Consume(); 
                 Jump(false);
                 
             }
+
         }
 
 
         public bool CanSlide() {
             // TODO implement speed check
-            return rb.velocity.magnitude > o_walk.slideMinVel;
+            return true;
+            // return rb.velocity.magnitude > o_walk.slideMinVel;
         }
-
+        
+        // This function is the entire state machine of the different kinds of movement, excluding input. 
         void determineMode() {
-#if false 
-            Debug.Log(string.Format("\ngrounded: {0} | mode: {1} | velocity {2}",
-                       state.isGrounded.current,
-                       state.mode.current,
-                       rb.velocity.y));
-#endif
+           // Transitions when touching ground 
+           // EXCLUDES: 
+           //   Jump key: ANY -> JUMP 
+           //   Slide key: ANY -> SLIDE 
+           //Debug.Log(state.mode.current);
            if (state.isGrounded) {
-                if (state.mode == MovementMode.SLIDE)
-                    if (CanSlide())
-                        state.mode.Set(MovementMode.SLIDE);
-                    else {
+               // Transition out of jumping
+                if (state.mode == MovementMode.SLIDE && !CanSlide()){
+                        Debug.Log("Switching to walking bc CanSlide failed");
                         state.mode.Set(MovementMode.WALK);
                         hb_anim.SetBool("isSliding",false);
-                    }
-                else if (state.mode == MovementMode.JUMP && rb.velocity.y > -0.1)
-                    state.mode.Set(MovementMode.JUMP);
-                else if (state.mode != MovementMode.WALK)
+                }
+                // Transition 
+                //else if (state.mode == MovementMode.JUMP && rb.velocity.y > -0.1)
+                //    state.mode.Set(MovementMode.JUMP);
+                
+                // Transition from NOT SLIDE OR WALK to WALK 
+                else if (state.mode != MovementMode.WALK && 
+                         state.mode != MovementMode.SLIDE)
                 {
                     state.mode.Set(MovementMode.WALK);
-                    state.curAirActions = 0;
+                    state.curAirActions = 0; // Reset jumping 
                 }
            } else {
+                // When falling and not sliding go to AIR 
                 if (!((state.mode == MovementMode.JUMP && rb.velocity.y > -0.1) ||
                      state.mode == MovementMode.SLIDE ||
-                     state.mode == MovementMode.WALL))
+                     state.mode == MovementMode.WALL || 
+                     state.mode == MovementMode.AIR))
                     state.mode.Set(MovementMode.AIR);
-
+            
+                // Set coyote time if fallen off a ledge while walking
+                // TODO: This should be moved somewhere where it fits more
+                // TODO: This introduced a bug where you don't have coyote time 
+                //        when sliding off a ledge
                 if (state.mode.previous == MovementMode.WALK && 
                     state.mode.current == MovementMode.AIR) 
                     o_air.coyoteTime.Set();
            }
         }
-
+        
+        // This method is the magic that keeps the hitbox above the grounds so one can use stairs
         void applyFloatation(){
+            // Check if we have ground below us 
+            // TODOD: isGrounded can be used for consistency
             if(detection[SRLegacy.DIR.DOWN])
             {
+                // Get the height at which we want to float 
                 var targetY = detection[SRLegacy.DIR.DOWN].getPoint().y + springNeutralPoint; 
                 
+                // Subtract where the missle is from the missle isn't
                 var diff    = targetY - transform.position.y;
                 
-                if (diff < -floatSpringLength || 
-                    diff > floatSpringLength)
+                // If the spring is stretched too long, lose contact
+                if (diff < -o_spring.floatSpringLength)
                     diff = 0; 
             
-
+                // Only use the spring when walking
                 if (state.mode == MovementMode.WALK){ 
                     
-                    if (diff > -0.2f && diff < 0.5f && Mathf.Abs(rb.velocity.y) < 1.0f) {
-                        transform.position.Set(transform.position.x, targetY, transform.position.z);  
-                        return;
+                    // If we are close to being neutral, snap to the target height
+                    if (false && diff > -0.2f && diff < 0.5f && Mathf.Abs(rb.velocity.y) < 1.0f) {
+                        rb.MovePosition(Vector3.up * diff);  
+                        return; // No spring action needed 
                     }
+                
+                    // Calculate spring-damper system 
+                    var dampingForce = rb.velocity.y * -o_spring.floatDamping;
+                    var springForce = o_spring.floatSpring * diff; 
 
-                    var dampingForce = rb.velocity.y * -floatDamping;
-                    var springForce = floatSpring * diff; 
-
+                    // Add the sum of the two forces 
+                    // TODO: Is the time.deltaTime really necessary? 
+                    //     * Both the damping and spring values are pretty large 
                     rb.AddForce(Vector3.up * (springForce + dampingForce) * Time.deltaTime);
 
                 }
             
             }
 #if false
+            // Debug logging of the floatation action 
+            // TIP: Use te preprocessor directive above to toggle 
                 Debug.Log(string.Format("diff: {0}, speed: {3}, spring: {1}, damping: {2}",
                             diff,
                             springForce, 
@@ -166,99 +179,123 @@ namespace Movement {
              
         }
 
-        void determineAccelerationAndDesiredSpeed(out float acc, out float desiredSpeed){
-                switch (state.mode.current) {
-                case MovementMode.WALK:
-                    acc = state.isSprinting ? o_walk.runAcc : o_walk.walkAcc;
-                    desiredSpeed = state.isSprinting ? o_walk.runSpeedMax : o_walk.walkSpeedMax; 
-                    break;
-                case MovementMode.SLIDE: 
-                        if(state.isGrounded) {
-                            acc = 2 * o_walk.runAcc;
-                             // Make sure the player is not stuck in ceiling
-                            if(state.nearCeiling)
-                            {
-                                desiredSpeed = o_walk.walkSpeedMax; // Keep moving when under a obstacle
-                            }
-                            else 
-                            { 
-                                
-                                // desiredSpeed = new Vector2(rb.velocity.x, rb.velocity.z).magnitude + Mathf.Clamp(-rb.velocity.y,0, float.MaxValue);
-                                desiredSpeed = new Vector3(rb.velocity.x, 
-                                                            Mathf.Clamp(rb.velocity.y, float.MinValue, 0),
-                                                            rb.velocity.z).magnitude;
-
-                                if (desiredSpeed > o_walk.walkSpeedMax){
-                                    desiredSpeed -= (o_walk.slideDrag * rb.velocity.magnitude * Time.deltaTime); // Incur drag
-                                } else if (desiredSpeed < o_walk.slideMinVel+2) {
-                                    desiredSpeed = 0; 
-                                }
-
-                                    
-#if true
-                                Debug.Log(string.Format("\ncurrent: {0} | desired: {1} | can slide {2} | vspeed {3}",
-                                           rb.velocity.magnitude,
-                                           desiredSpeed,
-                                           CanSlide(),
-                                           rb.velocity.y));
-#endif
-                            }
+        void lateralMovement(){
+            // Find the desired speed of the player and the acceleration
+            switch (state.mode.current) {
+            case MovementMode.WALK:
+                // Basic movement, faster when sprinting
+                var acc = state.isSprinting ? o_walk.runAcc : o_walk.walkAcc;
+                var desiredSpeed = state.isSprinting ? o_walk.runSpeedMax : o_walk.walkSpeedMax; 
+                WalkFriction();
+                WalkMovementSource(desiredSpeed,acc);
+                break;
+            case MovementMode.SLIDE: 
+                    // TODO: Refactor this mess 
+                    if(state.isGrounded) {
+                         // Make sure the player is not stuck in ceiling
+                        if(state.nearCeiling)
+                        {
+                            WalkFriction();
+                            WalkMovementSource(o_walk.runSpeedMax,o_walk.runAcc);
                         }
                         else 
-                        {
-                            goto case MovementMode.AIR;
+                        { 
+                            var lateralVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                            var directionDifference = (ViewAdjustedInput() - lateralVel.normalized).normalized;  
+                            var force = directionDifference * o_walk.slideTurnForce * Time.deltaTime;
+
+                            var drag = lateralVel * -o_walk.slideDrag * Time.deltaTime; 
+                            rb.AddForce(force + drag, ForceMode.Force);
                         }
-                break;
+                    }
+                    else 
+                    {
+                        // No unique behaviour when in air
+                        goto case MovementMode.AIR;
+                    }
+            break;
 
-                case MovementMode.JUMP:
-                case MovementMode.AIR: 
-                    // Jumping movement
-
-                    acc = o_air.inAirAcceleration;
-                    desiredSpeed = Mathf.Max(o_air.inAirMaxAddedSpeed, 
-                                             new Vector3(rb.velocity.x,0,rb.velocity.z).magnitude);                                                                                                                                                             
-                break;
-                default:  
-                        acc = 0; 
-                        desiredSpeed = 0; 
-                break;
+            case MovementMode.JUMP:
+            case MovementMode.AIR: 
+                WalkMovementSource(20,o_air.inAirAcceleration); 
+            break;
+            default:
+                // In case of edge cases, dont move 
+            break;
             }
 
 
+                
         }
 
-        void applyLateralMovementForce(float acc, float desiredSpeed){
-                var x_movement = state.mode == MovementMode.SLIDE ? 0 : in_walk.x; 
-                var z_movement = 0.0f;
-                var _desiredSpeed = desiredSpeed; 
+        Vector3 ViewAdjustedInput(){
+            if (in_walk.magnitude == 0) {
+                return Vector3.zero;
+            } 
 
-                if (state.isGrounded || o_air.allowForward) {
-                    z_movement = state.mode == MovementMode.SLIDE ? 1 : in_walk.y;
-                } 
-                // Calculate velocity vector with acquired speed 
-                var desiredVelocity = new Vector3(x_movement,0,z_movement)
-                      * desiredSpeed;
+            // Don't allow strafing while sliding 
+            float x_movement = in_walk.x; 
+            // Only allow forward and backward movement when on the ground 
+            //   unless allow forward is enabled
+            float z_movement = 0.0f;
+            if (state.isGrounded || o_air.allowForward) {
+                // Slide locks you into going forward
+                z_movement = state.mode == MovementMode.SLIDE ? 1 : in_walk.y;
+            } 
+            return Quaternion.AngleAxis(viewCamera.eulerAngles.y,Vector3.up) * new Vector3(x_movement,0,z_movement).normalized;
 
-                if (detection[SRLegacy.DIR.DOWN]){
-                    // Project on any plane we could be 
-                    var normal = detection[SRLegacy.DIR.DOWN].getNormal();
-                    desiredVelocity = Vector3.ProjectOnPlane(desiredVelocity, normal);
+        } 
+
+        Vector3 ProjectOnGround(Vector3 target){
+            // Project the velocity on the surface we are walking on 
+            if (detection[SRLegacy.DIR.DOWN]){
+                var normal = detection[SRLegacy.DIR.DOWN].getNormal();
+                return Vector3.ProjectOnPlane(target, normal);
+            }
+            return target;  
+        } 
+
+        void WalkFriction(){
+            var speed = rb.velocity.magnitude; 
+            if (speed > 0) {
+                var drag = speed * -o_walk.walkDrag * Time.deltaTime;
+                rb.AddForce(rb.velocity.normalized * Mathf.Min(drag,0), ForceMode.Acceleration);
+            } 
+        }
+
+        void WalkMovementSource(float desiredSpeed, float acceleration){
+            var accelerationDirection = ViewAdjustedInput();
+
+           // Project the input with the velocity we have already 
+           var projectedSpeed = Vector3.Dot(rb.velocity,ViewAdjustedInput());
+           var acc = acceleration * Time.deltaTime; 
+           
+           if (projectedSpeed + acc > desiredSpeed) 
+                acc = desiredSpeed - projectedSpeed; 
+
+           rb.AddForce(acc * accelerationDirection,ForceMode.Acceleration);
+        }
+        void WalkMovement(float desiredSpeed, float acceleration){
+                // Calculate velocity vector with acquired
+                var desiredVelocity = ProjectOnGround(
+                        (ViewAdjustedInput() * desiredSpeed))
+                            + (Vector3.up * rb.velocity.y);
+                
+                // See what adjustments we need to achieve the desiredVelocity; 
+                var differenceVector = desiredVelocity - rb.velocity; 
+
+                // Clamp the magnitude of the change to 1 
+                if (differenceVector.magnitude > 1.0f) {
+                    differenceVector.Normalize();  
                 }
-                
-                desiredVelocity += Vector3.up * rb.velocity.y;
 
-                
-                // Adjust to camera rotation
-                desiredVelocity = Quaternion.AngleAxis(viewCamera.eulerAngles.y,Vector3.up) * desiredVelocity;
-                
                 // Get the actual acceleration vector
-                var acceleration = (desiredVelocity - rb.velocity).normalized * acc;
+                var accelerationVector = (desiredVelocity - rb.velocity).normalized * acceleration;
 
                 // Apply force
-                rb.AddForce(acceleration * Time.deltaTime ,ForceMode.Acceleration);
+                rb.AddForce(accelerationVector * Time.deltaTime, ForceMode.Acceleration);
 
-                
-        }
+        } 
 
         void applyCharacterRotation(){
             if (state.mode == MovementMode.SLIDE || in_walk.magnitude > 0){
@@ -280,7 +317,9 @@ namespace Movement {
             }
 
         }
-
+// 
+// Messages from PlayerInput 
+// 
         void OnMove(InputValue val){
             in_walk = val.Get<Vector2>();
         }
@@ -295,6 +334,7 @@ namespace Movement {
         
         void OnSlideStart(){
             if(CanSlide()){
+                Debug.Log("Start slide");
                 state.mode.Set(MovementMode.SLIDE);
                 hb_anim.SetBool("isSliding" ,true);
             }
@@ -304,8 +344,6 @@ namespace Movement {
             Debug.Log("Input: Stop Sliding");
             Debug.Log(state.nearCeiling.current);
             if(!state.nearCeiling.current){
-                state.mode.Set(MovementMode.WALK);
-                determineMode();
                 state.mode.Set(MovementMode.WALK);
                 Debug.Log("Action: Stop Sliding");
                  hb_anim.SetBool("isSliding" ,false);
@@ -347,6 +385,11 @@ namespace Movement {
         
     }
 
+//
+// Option objects 
+//
+// TODO: Move to separate file
+
     [System.Serializable]
     public class MovementState {
         public ShiftValue<MovementMode> mode = new ShiftValue<MovementMode>(MovementMode.WALK); 
@@ -365,68 +408,5 @@ namespace Movement {
         JUMP,
         SLIDE,
         WALL, 
-    }
-
-
-    [System.Serializable]
-    public class GroundClass 
-    {
-        [Header("GroundMovement")]
-        [Tooltip("Acceleration for walking ")]
-        public float walkAcc = 900;
-        [Tooltip("Acceleration for running")]
-        public float runAcc  = 1200; 
-        [Tooltip("Max walking speed ")]
-        public float walkSpeedMax = 6; 
-        [Tooltip("Max sprinting speed ")]
-        public float runSpeedMax = 12; 
-
-        [Header("Slide")]
-        public float slideDrag = 0.1f;
-        public float slideMinVel = 0.5f; 
-
-    }
-
-    [System.Serializable]
-    public class AerialClass {
-        [Header("General")]
-        [Tooltip("How much double jumps or dashes can the charater do before having to land again ")]
-        public int   maxInAirActions = 1;  
-
-        [Tooltip("Upwards velocity which gets added to the current velocity when jumping ")]
-        public float velocity  = 9;  
-        [Tooltip("Forwards velocity which gets added to the current velocity when dashing ")]
-        public float dashVelocity  = 12; 
-
-        [Header("Strafing")]
-        [Tooltip("Acceleration that is applied in-air")]
-        public float inAirAcceleration = 50;
-        [Tooltip("Maximal speed that is added to in-air movements")]
-        [Range(5.0f,float.MaxValue)]
-        public float inAirMaxAddedSpeed = 5;
-        [Tooltip("Allow adding forward (or backward) movement in-air.\nDisable for Source-like strafing")]
-        public bool  allowForward = false; 
-
-        #region  coyoteTime 
-        public TimeLimitedAction coyoteTime;
-        #endregion
-
-        #region buffering
-        public TimeLimitedAction jumpBuffering;
-        #endregion 
-
-    }
-
-    [System.Serializable]
-    public class WallClass
-    {
-        [Tooltip("Force which is applied while wallrunning")]
-        public float runForce = 10000; 
-        [Tooltip("Maximal speed while wallrunning ")]
-        public float maxSpeed = 10;    
-        [Tooltip("The vertical friction applied while wallrunning ")]
-        public float friction = 100f;  
-        [Tooltip("The jump velocity while bouncing off the wall")]
-        public float jumpVelocity = 12;  
     }
 }
