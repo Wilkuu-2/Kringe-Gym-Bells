@@ -13,6 +13,7 @@ namespace Movement{
         public float walkSpeedMax = 6; 
         [Tooltip("Max sprinting speed")]
         public float runSpeedMax = 12; 
+        public float walkDrag = 10f; 
 
         [Header("Slide")]
         [Tooltip("Resistance of the ground when sliding")]

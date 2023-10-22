@@ -185,7 +185,8 @@ namespace Movement {
                 // Basic movement, faster when sprinting
                 var acc = state.isSprinting ? o_walk.runAcc : o_walk.walkAcc;
                 var desiredSpeed = state.isSprinting ? o_walk.runSpeedMax : o_walk.walkSpeedMax; 
-                WalkMovement(desiredSpeed,acc);
+                WalkFriction();
+                WalkMovementSource(desiredSpeed,acc);
                 break;
             case MovementMode.SLIDE: 
                     // TODO: Refactor this mess 
@@ -193,14 +194,16 @@ namespace Movement {
                          // Make sure the player is not stuck in ceiling
                         if(state.nearCeiling)
                         {
-                            WalkMovement(o_walk.runSpeedMax,o_walk.runAcc);
+                            WalkFriction();
+                            WalkMovementSource(o_walk.runSpeedMax,o_walk.runAcc);
                         }
                         else 
                         { 
                             var lateralVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
                             var directionDifference = (ViewAdjustedInput() - lateralVel.normalized).normalized;  
                             var force = directionDifference * o_walk.slideTurnForce * Time.deltaTime;
-                            var drag = lateralVel * -o_walk.slideDrag; 
+
+                            var drag = lateralVel * -o_walk.slideDrag * Time.deltaTime; 
                             rb.AddForce(force + drag, ForceMode.Force);
                         }
                     }
@@ -213,8 +216,7 @@ namespace Movement {
 
             case MovementMode.JUMP:
             case MovementMode.AIR: 
-                // Accelerate in air  
-                rb.AddForce(ViewAdjustedInput() * o_air.inAirAcceleration * Time.deltaTime, ForceMode.Acceleration);
+                WalkMovementSource(20,o_air.inAirAcceleration); 
             break;
             default:
                 // In case of edge cases, dont move 
@@ -226,8 +228,12 @@ namespace Movement {
         }
 
         Vector3 ViewAdjustedInput(){
+            if (in_walk.magnitude == 0) {
+                return Vector3.zero;
+            } 
+
             // Don't allow strafing while sliding 
-            float x_movement = state.mode == MovementMode.SLIDE ? 0 : in_walk.x; 
+            float x_movement = in_walk.x; 
             // Only allow forward and backward movement when on the ground 
             //   unless allow forward is enabled
             float z_movement = 0.0f;
@@ -235,7 +241,7 @@ namespace Movement {
                 // Slide locks you into going forward
                 z_movement = state.mode == MovementMode.SLIDE ? 1 : in_walk.y;
             } 
-            return Quaternion.AngleAxis(viewCamera.eulerAngles.y,Vector3.up) * new Vector3(x_movement,0,z_movement);
+            return Quaternion.AngleAxis(viewCamera.eulerAngles.y,Vector3.up) * new Vector3(x_movement,0,z_movement).normalized;
 
         } 
 
@@ -248,6 +254,26 @@ namespace Movement {
             return target;  
         } 
 
+        void WalkFriction(){
+            var speed = rb.velocity.magnitude; 
+            if (speed > 0) {
+                var drag = speed * -o_walk.walkDrag * Time.deltaTime;
+                rb.AddForce(rb.velocity.normalized * Mathf.Min(drag,0), ForceMode.Acceleration);
+            } 
+        }
+
+        void WalkMovementSource(float desiredSpeed, float acceleration){
+            var accelerationDirection = ViewAdjustedInput();
+
+           // Project the input with the velocity we have already 
+           var projectedSpeed = Vector3.Dot(rb.velocity,ViewAdjustedInput());
+           var acc = acceleration * Time.deltaTime; 
+           
+           if (projectedSpeed + acc > desiredSpeed) 
+                acc = desiredSpeed - projectedSpeed; 
+
+           rb.AddForce(acc * accelerationDirection,ForceMode.Acceleration);
+        }
         void WalkMovement(float desiredSpeed, float acceleration){
                 // Calculate velocity vector with acquired
                 var desiredVelocity = ProjectOnGround(
