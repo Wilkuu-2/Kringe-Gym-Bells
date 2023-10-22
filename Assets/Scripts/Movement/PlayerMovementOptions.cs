@@ -36,7 +36,8 @@ namespace Movement{
 
         [Header("Strafing")]
         [Tooltip("Acceleration that is applied in-air")]
-        public float inAirAcceleration = 1;
+        public float inAirAcceleration = 1000;
+        public float inAirMaxSpeed = 22; 
         [Tooltip("Allow adding forward (or backward) movement in-air.\nDisable for Source-like strafing")]
         public bool  allowForward = false; 
         [Tooltip("Allow buffering jumps constantly when spacebar is held")]

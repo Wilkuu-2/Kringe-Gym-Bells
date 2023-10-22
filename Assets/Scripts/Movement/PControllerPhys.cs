@@ -13,9 +13,9 @@ namespace Movement {
 
         private float springNeutralPoint {get => col.bounds.extents.y + o_spring.floatHeight;}
 
-        [Range(60,3600)]
+        [Range(60,10800)]
         [Tooltip("The speed at which the character rotates to the movement")]
-        public float rotationSpeed = 720; 
+        public float rotationSpeed = 6400f; 
 
 
         [Header("Settings")]
@@ -217,7 +217,7 @@ namespace Movement {
 
             case MovementMode.JUMP:
             case MovementMode.AIR: 
-                WalkMovementSource(20,o_air.inAirAcceleration); 
+                WalkMovementSource(o_air.inAirMaxSpeed,o_air.inAirAcceleration); 
             break;
             default:
                 // In case of edge cases, dont move 
