@@ -2729,6 +2729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2602775830333025150, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
+      propertyPath: o_walk.slideTurnAccel
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602775830333025150, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
+        type: 3}
       propertyPath: o_air.inAirAcceleration
       value: 600
       objectReference: {fileID: 0}
