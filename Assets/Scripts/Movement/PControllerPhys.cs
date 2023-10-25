@@ -351,6 +351,8 @@ namespace Movement {
         }
 
         void Jump(bool isInAir){
+                Debug.Log("Jumping from: " + (isInAir ? "Air" : "Ground"));
+                Debug.Log("State:" + state.mode.current);
                 // Cancel out any vertical speed if it is negative 
                 if(rb.velocity.y < 0)
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -366,10 +368,13 @@ namespace Movement {
         void OnJumpStart(){
             state.pressingJump.Set(true); 
             // TODO Wall logic
-            if(state.isGrounded || o_air.coyoteTime.Consume()){
+            if((state.isGrounded || o_air.coyoteTime.Consume())
+                && state.mode != MovementMode.JUMP
+                && state.mode != MovementMode.AIR){
                 Jump(false);
             }
-            else if(state.curAirActions < o_air.maxInAirActions){
+            else if(state.curAirActions < o_air.maxInAirActions
+                    && state.mode != MovementMode.JUMP){
                 Jump(true);
             }
             else{
