@@ -21,7 +21,7 @@ namespace Movement{
         [Tooltip("Minimal velocity allowed for sliding")]
         public float slideMinVel = 0.5f; 
         [Tooltip("The force used to turn while sliding")]
-        public float slideTurnForce = 60000f;
+        public float slideTurnAccel = 700f;
 
     }
 

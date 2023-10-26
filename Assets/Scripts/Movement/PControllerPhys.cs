@@ -186,7 +186,7 @@ namespace Movement {
                 // Basic movement, faster when sprinting
                 var acc = state.isSprinting ? o_walk.runAcc : o_walk.walkAcc;
                 var desiredSpeed = state.isSprinting ? o_walk.runSpeedMax : o_walk.walkSpeedMax; 
-                WalkFriction();
+                WalkFriction(o_walk.walkDrag);
                 WalkMovementSource(desiredSpeed,acc);
                 break;
             case MovementMode.SLIDE: 
@@ -195,17 +195,62 @@ namespace Movement {
                          // Make sure the player is not stuck in ceiling
                         if(state.nearCeiling)
                         {
-                            WalkFriction();
+                            WalkFriction(o_walk.walkDrag);
                             WalkMovementSource(o_walk.runSpeedMax,o_walk.runAcc);
                         }
                         else 
                         { 
-                            var lateralVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                            var directionDifference = (ViewAdjustedInput() - lateralVel.normalized).normalized;  
-                            var force = directionDifference * o_walk.slideTurnForce * Time.deltaTime;
+                            Vector3 nn = detection[SRLegacy.DIR.DOWN].getNormal();
+                            WalkFriction(o_walk.slideDrag);
+                            
+                            // Slope case
+                            if (nn != Vector3.up){
+                                float grav = Physics.gravity.y;
+                                //Debug.Log(nn);
+                                /*Vector3 fullNormalForce = new Vector3(
+                                         nn.x / nn.y * -grav,
+                                         -grav,
+                                         nn.z / nn.y * -grav); */
 
-                            var drag = lateralVel * -o_walk.slideDrag * Time.deltaTime; 
-                            rb.AddForce(force + drag, ForceMode.Force);
+                                Vector3 lateralNormalForce = new Vector3(
+                                         nn.x / nn.y * -grav,
+                                         0,
+                                         nn.z / nn.y * -grav);
+
+                                //Debug.DrawRay(transform.position, nn * 10, Color.red);
+                                //Debug.DrawRay(transform.position, fullNormalForce, Color.blue);
+                                //Debug.DrawRay(transform.position, lateralNormalForce, Color.green);
+
+                                // Absolutely cancel out the normal force 
+                                // rb.AddForce(-lateralNormalForce, ForceMode.Acceleration);
+
+                                // Difference between the horizontal component of the normal force 
+                                Vector3 viewDifference = (ViewAdjustedInput() - lateralNormalForce.normalized) / 2;
+                                // Debug.Log(viewDifference.magnitude);
+
+                                // Don't correct when the normal force and view angle go in similar directions
+                                if (viewDifference.magnitude < 0.34){
+                                    viewDifference = Vector3.zero;
+                                }
+                
+                                // Calculte the force 
+                                Vector3 slideCohesionForce =  Vector3.ClampMagnitude(viewDifference * o_walk.slideTurnAccel, lateralNormalForce.magnitude);
+                                
+                                //Debug.DrawRay(transform.position, ViewAdjustedInput() * 10, Color.red);
+                                //Debug.DrawRay(transform.position, slideCohesionForce, Color.cyan);
+
+                                rb.AddForce(slideCohesionForce, ForceMode.Acceleration);
+                            } else {
+                                
+                                Vector3 lateralSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                                Vector3 viewDifference = (ViewAdjustedInput() - lateralSpeed) /2.0f;
+                                Vector3 slideTurnForce =  Vector3.ClampMagnitude(viewDifference * o_walk.slideTurnAccel, lateralSpeed.magnitude );
+                                rb.AddForce(slideTurnForce, ForceMode.Acceleration);
+                                
+
+                            }
+
+
                         }
                     }
                     else 
@@ -229,7 +274,7 @@ namespace Movement {
         }
 
         Vector3 ViewAdjustedInput(){
-            if (in_walk.magnitude == 0) {
+            if (in_walk.magnitude == 0 && state.mode != MovementMode.SLIDE) {
                 return Vector3.zero;
             } 
 
@@ -242,6 +287,10 @@ namespace Movement {
                 // Slide locks you into going forward
                 z_movement = state.mode == MovementMode.SLIDE ? 1 : in_walk.y;
             } 
+            // if(state.mode == MovementMode.SLIDE){
+            //     z_movement = 1; 
+            //    x_movement = 0; 
+            // }
             return Quaternion.AngleAxis(viewCamera.eulerAngles.y,Vector3.up) * new Vector3(x_movement,0,z_movement).normalized;
 
         } 
@@ -255,10 +304,10 @@ namespace Movement {
             return target;  
         } 
 
-        void WalkFriction(){
+        void WalkFriction(float drag_constant){
             var speed = rb.velocity.magnitude; 
             if (speed > 0) {
-                var drag = speed * -o_walk.walkDrag * Time.deltaTime;
+                var drag = speed * -drag_constant * Time.deltaTime;
                 rb.AddForce(rb.velocity.normalized * Mathf.Min(drag,0), ForceMode.Acceleration);
             } 
         }
