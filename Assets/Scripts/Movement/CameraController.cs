@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     public  Vector2 sensitivity = new Vector2(10f, 0.1f);
     public  float   y_min = -6;
     public  float   y_max =  6;
-    public  Transform parent, lookpoint;
+    public  Transform parent, lookpoint, rotation;
     public InputActionReference action; 
     
     // Start is called before the first frame update
@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
                                 lookpoint.localPosition.x, 
                                 lookpoint.localPosition.y + input.y * sensitivity.y * Time.deltaTime,
                                 lookpoint.localPosition.z);
+       rotation.LookAt(lookpoint.position,Vector3.up); 
         
        transform.Rotate(Vector3.up, input.x * sensitivity.x * Time.deltaTime);
 
