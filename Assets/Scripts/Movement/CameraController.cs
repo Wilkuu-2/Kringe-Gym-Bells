@@ -28,7 +28,8 @@ public class CameraController : MonoBehaviour
                                 lookpoint.localPosition.y + input.y * sensitivity.y * Time.deltaTime,
                                 lookpoint.localPosition.z);
        rotation.LookAt(lookpoint.position,Vector3.up); 
-        
+       rotation.eulerAngles = new Vector3(rotation.rotation.eulerAngles.x,rotation.eulerAngles.y,0);     
+
        transform.Rotate(Vector3.up, input.x * sensitivity.x * Time.deltaTime);
 
     }
