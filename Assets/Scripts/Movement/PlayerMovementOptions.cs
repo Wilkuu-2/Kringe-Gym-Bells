@@ -22,6 +22,11 @@ namespace Movement{
         public float slideMinVel = 0.5f; 
         [Tooltip("The force used to turn while sliding")]
         public float slideTurnAccel = 700f;
+        public bool  enableSlide = true;
+        
+        public GroundClass Copy() {
+            return (GroundClass) MemberwiseClone(); 
+        }
 
     }
 
@@ -33,6 +38,8 @@ namespace Movement{
 
         [Tooltip("Upwards velocity which gets added to the current velocity when jumping ")]
         public float velocity  = 9;  
+        public bool  enableJump = true;
+        public bool  auto_bhop = true; 
 
         [Header("Strafing")]
         [Tooltip("Acceleration that is applied in-air")]
@@ -41,15 +48,10 @@ namespace Movement{
         [Tooltip("Allow adding forward (or backward) movement in-air.\nDisable for Source-like strafing")]
         public bool  allowForward = false; 
         [Tooltip("Allow buffering jumps constantly when spacebar is held")]
-        public bool  auto_bhop = true; 
+        public AerialClass Copy() {
+            return (AerialClass) MemberwiseClone(); 
+        }
 
-        #region  coyoteTime 
-        public TimeLimitedAction coyoteTime;
-        #endregion
-
-        #region buffering
-        public TimeLimitedAction jumpBuffering;
-        #endregion 
 
     }
 
@@ -67,7 +69,7 @@ namespace Movement{
     }
 
     [System.Serializable] 
-    public class SpringOptions {
+    public class SpringOptions{
         [Tooltip("How high the collider hover above the ground ")] 
         public float floatHeight   = 0.4f; 
         public float floatSpringLength = 2; 
@@ -79,6 +81,66 @@ namespace Movement{
         public float floatDampingClamp = 3f;
         public float maxVerticalVelocityOnGround = 3f;
 
+        public SpringOptions Copy() {
+            return (SpringOptions) MemberwiseClone(); 
+        }
     }
+
+    [System.Serializable]
+    public class MovementValues {
+        // Default options 
+        [SerializeField] SpringOptions    spring; 
+        [SerializeField] GroundClass      ground; 
+        [SerializeField] AerialClass      air; 
+
+        public SpringOptions appliedSpring {get; private set;} 
+        public GroundClass appliedGround   {get; private set;} 
+        public AerialClass appliedAir      {get; private set;} 
+
+        public  MovementEffectStack       stack; 
+        [SerializeField][ReadOnly] MovementEffectValues      stackedEffects; 
+        
+        public TimeLimitedAction coyoteTime;
+        public TimeLimitedAction jumpBuffering;
+
+
+        
+        public bool canJump(){
+            return !stackedEffects.blockJump;
+        }
+        public bool canSlide(){
+            return !stackedEffects.blockSlide;
+        }
+
+        public void Init(){
+            stack = new MovementEffectStack();
+            stackedEffects = MovementEffectValues.newEmpty("stacked");
+        } 
+        public void Refresh(){
+            if (stack.StackedEffectValues(ref stackedEffects))
+                applyValues(); 
+        }
+
+        private void applyValues()
+        {
+            // Changes to spring 
+            appliedSpring = spring.Copy();
+
+            // Changes to ground 
+            appliedGround = ground.Copy();
+            appliedGround.enableSlide = appliedGround.enableSlide && !stackedEffects.blockSlide;
+            appliedGround.walkAcc += stackedEffects.groundAccelChange;
+            appliedGround.walkSpeedMax += stackedEffects.groundSpeedChange;
+
+            // Changes to air 
+            appliedAir = air.Copy();
+            appliedAir.enableJump = appliedAir.enableJump && !stackedEffects.blockJump;
+            appliedAir.auto_bhop = appliedAir.auto_bhop && !stackedEffects.enableAutoBhop;
+            appliedAir.inAirAcceleration += stackedEffects.airAccelChange;
+            appliedAir.inAirMaxSpeed += stackedEffects.airSpeedChange;
+            appliedAir.maxInAirActions += stackedEffects.inAirActionChange; 
+            
+        }         
+    }  
 }
 
