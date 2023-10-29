@@ -26,4 +26,8 @@ public class TimeLimitedAction
         return !consumed && Time.time < bufferTime; 
 
     }
+
+    public static bool isActive(TimeLimitedAction action){
+        return action.Peek();
+    } 
 }

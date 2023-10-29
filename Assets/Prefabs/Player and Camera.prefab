@@ -61,7 +61,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458991730644271648}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1e-45, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.000000048037354, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -437,7 +437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3629666273077804228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -1e-45, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.000000048037354, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -655,7 +655,7 @@ GameObject:
   - component: {fileID: 2602775830333025150}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -708,7 +708,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5418801064045481412}
   serializedVersion: 4
-  m_Mass: 16
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -794,38 +794,47 @@ MonoBehaviour:
   detection: {fileID: 8091663841912871180}
   viewCamera: {fileID: 1867737942503360804}
   rotationSpeed: 3600
-  o_spring:
-    floatHeight: 0.6
-    floatSpringLength: 0.8
-    floatSpring: 70000
-    floatDamping: 10000
-    floatDampingClamp: 3
-    maxVerticalVelocityOnGround: 3
-  o_wall:
-    runForce: 10000
-    maxSpeed: 10
-    friction: 100
-    jumpVelocity: 12
-  o_walk:
-    walkAcc: 7000
-    runAcc: 8000
-    walkSpeedMax: 12
-    runSpeedMax: 18
-    walkDrag: 90
-    slideDrag: 20
-    slideMinVel: 0.1
-    slideTurnAccel: 70
-  o_air:
-    maxInAirActions: 1
-    velocity: 6
-    inAirAcceleration: 600
-    inAirMaxSpeed: 8
-    allowForward: 0
-    auto_bhop: 1
+  movementVals:
+    spring:
+      floatHeight: 0.6
+      floatSpringLength: 1.5
+      floatSpring: 130000
+      floatDamping: 3500
+      floatDampingClamp: 3
+      maxVerticalVelocityOnGround: 3
+    ground:
+      walkAcc: 7000
+      runAcc: 8000
+      walkSpeedMax: 20
+      runSpeedMax: 25
+      walkDrag: 80
+      slideDrag: 10
+      slideMinVel: 0.1
+      slideTurnAccel: 100
+      enableSlide: 1
+    air:
+      maxInAirActions: 1
+      velocity: 7
+      enableJump: 1
+      auto_bhop: 0
+      inAirAcceleration: 600
+      inAirMaxSpeed: 12
+      allowForward: 0
+    stackedEffects:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
     coyoteTime:
       maxDelay: 2
     jumpBuffering:
-      maxDelay: 2
+      maxDelay: 5
   state:
     mode:
       _current: 0
@@ -962,7 +971,7 @@ MonoBehaviour:
   m_VerticalDamping: 0.5
   m_ScreenX: 0.5
   m_ScreenY: 0.5
-  m_DeadZoneWidth: 0.128
+  m_DeadZoneWidth: 0.15
   m_DeadZoneHeight: 0.191
   m_SoftZoneWidth: 0.511
   m_SoftZoneHeight: 0.722
@@ -981,7 +990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 2
+  m_BindingMode: 3
   m_FollowOffset: {x: 0, y: 0, z: -9.37}
   m_XDamping: 1
   m_YDamping: 1
@@ -1121,7 +1130,7 @@ Transform:
   m_GameObject: {fileID: 9037167366786211289}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.96}
+  m_LocalPosition: {x: 0, y: 0, z: -0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

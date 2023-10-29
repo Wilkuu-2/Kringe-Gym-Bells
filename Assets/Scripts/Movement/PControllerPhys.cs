@@ -20,10 +20,10 @@ namespace Movement {
 
         [Header("Settings")]
         // public SRLegacy.MovementClass movement; 
-        public SpringOptions o_spring;
-        public WallClass o_wall;
-        public GroundClass     o_walk;
-        public AerialClass      o_air;
+        public MovementValues movementVals; 
+        private SpringOptions o_spring {get => movementVals.appliedSpring;}
+        private GroundClass     o_walk {get => movementVals.appliedGround;}
+        private AerialClass      o_air {get => movementVals.appliedAir;}
         
 
         public MovementState state;
@@ -40,11 +40,14 @@ namespace Movement {
             rb = GetComponent<Rigidbody>();
             col = GetComponent<Collider>();
             hb_anim = GetComponent<Animator>(); 
+            movementVals.Init();
 
             // TODO: Move somewhere else
             Cursor.lockState = CursorLockMode.Locked; 
         } 
         public void FixedUpdate() {
+            movementVals.Refresh();
+            
             rb.angularVelocity = new Vector3(rb.angularVelocity.x, 0 ,rb.angularVelocity.z); 
 
             if(detection[SRLegacy.DIR.DOWN]){
@@ -69,11 +72,11 @@ namespace Movement {
                 && state.mode.current == MovementMode.WALK 
                 && state.pressingJump
                 && o_air.auto_bhop){
-                o_air.jumpBuffering.Set();
+                movementVals.jumpBuffering.Set();
             }
 
-            if(state.isGrounded.current && state.isGrounded.previous && o_air.jumpBuffering.Peek()) {
-                o_air.jumpBuffering.Consume(); 
+            if(state.isGrounded.current && state.isGrounded.previous && movementVals.jumpBuffering.Peek()) {
+                movementVals.jumpBuffering.Consume(); 
                 Jump(false);
                 
             }
@@ -126,7 +129,7 @@ namespace Movement {
                 //        when sliding off a ledge
                 if (state.mode.previous == MovementMode.WALK && 
                     state.mode.current == MovementMode.AIR) 
-                    o_air.coyoteTime.Set();
+                    movementVals.coyoteTime.Set();
            }
         }
         
@@ -417,7 +420,7 @@ namespace Movement {
         void OnJumpStart(){
             state.pressingJump.Set(true); 
             // TODO Wall logic
-            if((state.isGrounded || o_air.coyoteTime.Consume())
+            if((state.isGrounded || movementVals.coyoteTime.Consume())
                 && state.mode != MovementMode.JUMP
                 && state.mode != MovementMode.AIR){
                 Jump(false);
@@ -427,13 +430,13 @@ namespace Movement {
                 Jump(true);
             }
             else{
-                o_air.jumpBuffering.Set();
+                movementVals.jumpBuffering.Set();
             }
         }
 
         void OnJumpEnd(){
             state.pressingJump.Set(false);
-            o_air.jumpBuffering.Consume(); 
+            movementVals.jumpBuffering.Consume(); 
         }
 
         
