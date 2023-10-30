@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System; 
+using UnityEngine;
 
 namespace Movement {
     [Serializable]
@@ -40,9 +41,9 @@ namespace Movement {
         }
 
     }
-
+    [System.Serializable]
     public class MovementEffect : TimeLimitedAction {
-        public readonly MovementEffectValues values; 
+        public MovementEffectValues values; 
        
         public MovementEffect(MovementEffectValues effect_values, bool active = true){
             values = effect_values; 
@@ -52,10 +53,10 @@ namespace Movement {
         } 
     } 
 
-
+    [System.Serializable]
     public class MovementEffectStack{
-        private List<MovementEffect> effects; 
-        private bool addedSinceLastRefresh = true; 
+        [SerializeField][ReadOnly] List<MovementEffect> effects; 
+        [SerializeField][ReadOnly] bool addedSinceLastRefresh = true; 
 
         public MovementEffectStack(){
             effects = new List<MovementEffect>();
@@ -72,7 +73,7 @@ namespace Movement {
             bool added = addedSinceLastRefresh; 
             addedSinceLastRefresh = false; 
             return 
-                effects.RemoveAll(TimeLimitedAction.isActive) > 0
+                effects.RemoveAll(e => !e.Peek()) > 0
                 || added;
         } 
 
@@ -81,7 +82,7 @@ namespace Movement {
             if (!RefreshEffects()){
                 return false; 
             } 
-
+            Debug.Log("Effect Stacking");
             // When some effects are out restack everything 
             stacked = MovementEffectValues.newEmpty(stacked.name);
             

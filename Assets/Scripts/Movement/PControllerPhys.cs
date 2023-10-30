@@ -403,6 +403,7 @@ namespace Movement {
         }
 
         void Jump(bool isInAir){
+                if (!movementVals.canJump()) return;
                 Debug.Log("Jumping from: " + (isInAir ? "Air" : "Ground"));
                 Debug.Log("State:" + state.mode.current);
                 // Cancel out any vertical speed if it is negative 
