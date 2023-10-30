@@ -4,11 +4,11 @@ namespace SRLegacy {
     public class PlayerRespawner : MonoBehaviour
     {
         public Transform respawnFlag;
-        public PlayerControllerRigibody player;
+        public GameObject player;
 
         public void OnTriggerEnter(Collider other)
         {
-            if(other.gameObject == player.gameObject){
+            if(other.gameObject == player){
                 player.transform.position = respawnFlag.position;
                 other.attachedRigidbody.velocity = Vector3.zero; 
             }
