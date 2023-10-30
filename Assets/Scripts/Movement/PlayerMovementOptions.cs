@@ -117,14 +117,12 @@ namespace Movement{
             stackedEffects = MovementEffectValues.newEmpty("stacked");
         } 
         public void Refresh(){
-            Debug.Log("Options refresh");
             if (stack.StackedEffectValues(ref stackedEffects))
                 applyValues(); 
         }
 
         private void applyValues()
         {
-            Debug.Log("applyValues");
             // Changes to spring 
             appliedSpring = spring.Copy();
 

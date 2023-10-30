@@ -34,6 +34,16 @@ namespace Movement {
         private Animator hb_anim; 
         private Vector2 in_walk;
 
+        public void MessageTest(Powerup.PickupType type){
+            Debug.Log("Player says:");
+            Debug.Log(type);
+        }
+
+        public void MessageTest2(){
+            Debug.Log("Player says:");
+            Debug.Log("DeezNuts");
+        }
+
         public void Start() 
         {
             // Get all the components

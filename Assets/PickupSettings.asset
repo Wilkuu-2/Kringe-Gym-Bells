@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2cf70471ea778254b19383c7a28c985, type: 3}
+  m_Name: PickupSettings
+  m_EditorClassIdentifier: Assembly-CSharp:Powerup:PickupEffectSettings
+  proteinEffects:
+    values:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    sendMessage: 0
+    sendType: 0
+    messageName: 
+  creatineEffects:
+    values:
+      name: Creatine
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 10
+      airAccelChange: 2000
+      inAirActionChange: 1
+      duration: 2
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 1
+    sendMessage: 1
+    sendType: 0
+    messageName: OnJumpStart
+  preworkoutEffects:
+    values:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    sendMessage: 0
+    sendType: 0
+    messageName: 
+  gripEffects:
+    values:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    sendMessage: 0
+    sendType: 0
+    messageName: 
+  beltEffects:
+    values:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    sendMessage: 0
+    sendType: 0
+    messageName: 

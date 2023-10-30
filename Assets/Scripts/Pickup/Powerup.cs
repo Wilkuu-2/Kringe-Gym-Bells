@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
+using Movement; 
+
 namespace Powerup
 {
     public enum PickupType { Protein, Creatine, Preworkout, Grip, Belt }
     public class Powerup : MonoBehaviour
     {
-        public PickupType pickuptype;
+        public PickupEffectSettings effects; 
+        public PickupType pickupType;
         private Rigidbody rb;
         private Vector3 startPos;
         private float angle;
@@ -16,7 +16,7 @@ namespace Powerup
         private float frequency = 0.01f;
         private float rotationalSpeed = 0.8f;
         private Vector3 rotationAngle = new Vector3(0, 0, 1);
-
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -39,23 +39,16 @@ namespace Powerup
 
         private void OnCollisionEnter(Collision collision)
         {
-            Destroy(gameObject);
-            if (collision.gameObject.CompareTag("Player"))
+            var player = collision.gameObject; 
+            if (player.CompareTag("Player"))
             {
-                switch (pickuptype)
-                {
-                    case PickupType.Protein:
-                        // Increment collection score by 1
-                        break;
-                    case PickupType.Creatine:
-                        // Increase how much you can carry before impaired for x seconds
-                        break;
-                    case PickupType.Preworkout:
-                        // Increase movement speed by x for y seconds
-                        break;
-                    default:
-                        break;
-                }
+                PlayerController controller = player.GetComponent<PlayerController>();
+                var effect = effects.GetEffect(pickupType); 
+                effects.TrySendMessage(pickupType, player);
+                
+                controller.movementVals.stack.AddEffect(effect);
+                
+                Destroy(gameObject);
             }
         }
     }
