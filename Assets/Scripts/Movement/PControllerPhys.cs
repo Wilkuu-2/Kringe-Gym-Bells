@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 namespace Movement {
     [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(PlayerInput))]
-
     public class PlayerController: MonoBehaviour
     {
         public SRLegacy.ObstacleDetector detection;
@@ -33,6 +32,7 @@ namespace Movement {
         private Collider col; 
         private Animator hb_anim; 
         private Vector2 in_walk;
+        private Inventory.PlayerInventory inventory; 
 
         public void MessageTest(Powerup.PickupType type){
             Debug.Log("Player says:");
@@ -50,13 +50,14 @@ namespace Movement {
             rb = GetComponent<Rigidbody>();
             col = GetComponent<Collider>();
             hb_anim = GetComponent<Animator>(); 
+            inventory = GetComponent<Inventory.PlayerInventory>();  
             movementVals.Init();
 
             // TODO: Move somewhere else
             Cursor.lockState = CursorLockMode.Locked; 
         } 
         public void FixedUpdate() {
-            movementVals.Refresh();
+            movementVals.Refresh(inventory);
             
             rb.angularVelocity = new Vector3(rb.angularVelocity.x, 0 ,rb.angularVelocity.z); 
 

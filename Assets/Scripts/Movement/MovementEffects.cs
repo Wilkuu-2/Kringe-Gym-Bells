@@ -40,6 +40,14 @@ namespace Movement {
        
         }
 
+        public static MovementEffectValues Sum(MovementEffectValues a, MovementEffectValues b){
+            var c = MovementEffectValues.newEmpty(a.name + " + " + b.name);
+            c.duration = a.duration;
+            c.SumInPlace(a);
+            c.SumInPlace(b);
+            return c; 
+        }
+
     }
     [System.Serializable]
     public class MovementEffect : TimeLimitedAction {

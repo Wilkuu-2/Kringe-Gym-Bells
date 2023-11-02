@@ -99,6 +99,8 @@ namespace Movement{
 
         public  MovementEffectStack       stack; 
         [SerializeField][ReadOnly] MovementEffectValues      stackedEffects; 
+        [SerializeField][ReadOnly] MovementEffectValues      inventoryEffects; 
+        [SerializeField][ReadOnly] MovementEffectValues      allEffects; 
         
         public TimeLimitedAction coyoteTime;
         public TimeLimitedAction jumpBuffering;
@@ -116,29 +118,35 @@ namespace Movement{
             stack = new MovementEffectStack();
             stackedEffects = MovementEffectValues.newEmpty("stacked");
         } 
-        public void Refresh(){
-            if (stack.StackedEffectValues(ref stackedEffects))
+        public void Refresh(Inventory.PlayerInventory inventory){
+            bool inventoryRefreshed = inventory.getEffects(
+                    out inventoryEffects);
+            bool stackRefreshed = stack.StackedEffectValues(ref stackedEffects); 
+            
+            if (inventoryRefreshed || stackRefreshed)
                 applyValues(); 
         }
 
         private void applyValues()
         {
+            
+            allEffects = MovementEffectValues.Sum(stackedEffects,inventoryEffects);
             // Changes to spring 
             appliedSpring = spring.Copy();
 
             // Changes to ground 
             appliedGround = ground.Copy();
-            appliedGround.enableSlide = appliedGround.enableSlide && !stackedEffects.blockSlide;
-            appliedGround.walkAcc += stackedEffects.groundAccelChange;
-            appliedGround.walkSpeedMax += stackedEffects.groundSpeedChange;
+            appliedGround.enableSlide = appliedGround.enableSlide && !allEffects.blockSlide;
+            appliedGround.walkAcc += allEffects.groundAccelChange;
+            appliedGround.walkSpeedMax += allEffects.groundSpeedChange;
 
             // Changes to air 
             appliedAir = air.Copy();
-            appliedAir.enableJump = appliedAir.enableJump && !stackedEffects.blockJump;
-            appliedAir.auto_bhop = appliedAir.auto_bhop && !stackedEffects.enableAutoBhop;
-            appliedAir.inAirAcceleration += stackedEffects.airAccelChange;
-            appliedAir.inAirMaxSpeed += stackedEffects.airSpeedChange;
-            appliedAir.maxInAirActions += stackedEffects.inAirActionChange; 
+            appliedAir.enableJump = appliedAir.enableJump && !allEffects.blockJump;
+            appliedAir.auto_bhop = appliedAir.auto_bhop && !allEffects.enableAutoBhop;
+            appliedAir.inAirAcceleration += allEffects.airAccelChange;
+            appliedAir.inAirMaxSpeed += allEffects.airSpeedChange;
+            appliedAir.maxInAirActions += allEffects.inAirActionChange; 
             
         }         
     }  
