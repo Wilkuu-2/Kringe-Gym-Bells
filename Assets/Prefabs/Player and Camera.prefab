@@ -61,7 +61,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458991730644271648}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.000000048037354, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_CollideAgainst:
     serializedVersion: 2
     m_Bits: 1
-  m_IgnoreTag: 
+  m_IgnoreTag: Player
   m_TransparentLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -437,7 +437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3629666273077804228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.000000048037354, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 585517959565517733}
   - component: {fileID: 6823921025787118070}
   - component: {fileID: 2602775830333025150}
+  - component: {fileID: 4115869892928038624}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -819,8 +820,33 @@ MonoBehaviour:
       auto_bhop: 0
       inAirAcceleration: 600
       inAirMaxSpeed: 12
-      allowForward: 0
+      allowForward: 1
+    stack:
+      effects: []
+      addedSinceLastRefresh: 1
     stackedEffects:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    inventoryEffects:
+      name: 
+      groundSpeedChange: 0
+      groundAccelChange: 0
+      airSpeedChange: 0
+      airAccelChange: 0
+      inAirActionChange: 0
+      duration: 0
+      blockSlide: 0
+      blockJump: 0
+      enableAutoBhop: 0
+    allEffects:
       name: 
       groundSpeedChange: 0
       groundAccelChange: 0
@@ -852,6 +878,31 @@ MonoBehaviour:
       _current: 0
       _previous: 0
     curAirActions: 0
+--- !u!114 &4115869892928038624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5418801064045481412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9419043b0e03c7ad39ccf3d5f3d76891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items: []
+  inventoryEffects:
+    name: 
+    groundSpeedChange: 0
+    groundAccelChange: 0
+    airSpeedChange: 0
+    airAccelChange: 0
+    inAirActionChange: 0
+    duration: 0
+    blockSlide: 0
+    blockJump: 0
+    enableAutoBhop: 0
+  capacity: 5
 --- !u!1 &6665161678643705263
 GameObject:
   m_ObjectHideFlags: 0
