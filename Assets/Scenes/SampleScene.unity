@@ -2758,12 +2758,12 @@ PrefabInstance:
     - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.00000003181029
       objectReference: {fileID: 0}
     - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -8.504079e-31
       objectReference: {fileID: 0}
     - target: {fileID: 736871485651984211, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
@@ -2788,12 +2788,17 @@ PrefabInstance:
     - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.00000003181029
       objectReference: {fileID: 0}
     - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -8.504079e-31
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602775830333025150, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
+        type: 3}
+      propertyPath: movementVals.ground.slideMinVel
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3558150684876971725, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}

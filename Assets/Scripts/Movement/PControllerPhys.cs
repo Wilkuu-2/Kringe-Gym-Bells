@@ -97,8 +97,7 @@ namespace Movement {
 
         public bool CanSlide() {
             // TODO implement speed check
-            return true;
-            // return rb.velocity.magnitude > o_walk.slideMinVel;
+            return rb.velocity.magnitude > o_walk.slideMinVel && movementVals.CanSlide();
         }
         
         // This function is the entire state machine of the different kinds of movement, excluding input. 
@@ -126,6 +125,8 @@ namespace Movement {
                     state.mode.Set(MovementMode.WALK);
                     state.curAirActions = 0; // Reset jumping 
                 }
+                else if (state.mode != MovementMode.SLIDE)
+                    hb_anim.SetBool("isSliding", false);
            } else {
                 // When falling and not sliding go to AIR 
                 if (!((state.mode == MovementMode.JUMP && rb.velocity.y > -0.1) ||

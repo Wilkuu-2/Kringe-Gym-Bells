@@ -15,10 +15,10 @@ MonoBehaviour:
   Name: Dumbell
   movementEffects:
     name: 
-    groundSpeedChange: 0
-    groundAccelChange: 0
-    airSpeedChange: 0
-    airAccelChange: 0
+    groundSpeedChange: -3
+    groundAccelChange: -100
+    airSpeedChange: -5
+    airAccelChange: -100
     inAirActionChange: 0
     duration: 0
     blockSlide: 0

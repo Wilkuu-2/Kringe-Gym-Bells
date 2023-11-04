@@ -108,10 +108,10 @@ namespace Movement{
 
         
         public bool canJump(){
-            return !stackedEffects.blockJump;
+            return !(stackedEffects.blockJump || inventoryEffects.blockJump) ;
         }
-        public bool canSlide(){
-            return !stackedEffects.blockSlide;
+        public bool CanSlide(){
+            return !(stackedEffects.blockSlide || inventoryEffects.blockSlide) ;
         }
 
         public void Init(){

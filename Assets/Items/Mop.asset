@@ -15,13 +15,13 @@ MonoBehaviour:
   Name: Mop
   movementEffects:
     name: 
-    groundSpeedChange: 0
+    groundSpeedChange: -1
     groundAccelChange: 0
-    airSpeedChange: 0
+    airSpeedChange: -1
     airAccelChange: 0
     inAirActionChange: 0
-    duration: 0
-    blockSlide: 0
+    duration: 1e+11
+    blockSlide: 1
     blockJump: 0
     enableAutoBhop: 0
   itemPrefab: {fileID: 1535986092854736910, guid: dc4ae6472019e14b0925bb9143fe619b,

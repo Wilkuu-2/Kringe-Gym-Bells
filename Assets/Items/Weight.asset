@@ -19,7 +19,7 @@ MonoBehaviour:
     groundAccelChange: 0
     airSpeedChange: 0
     airAccelChange: 0
-    inAirActionChange: 0
+    inAirActionChange: -1
     duration: 0
     blockSlide: 0
     blockJump: 0
