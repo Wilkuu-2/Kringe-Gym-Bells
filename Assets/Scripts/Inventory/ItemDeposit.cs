@@ -62,7 +62,7 @@ namespace Inventory
 
                         // Increment count 
                         acceptedItems[i].count++;
-                        Destroy(gItem);
+                        Destroy(gItem.gameObject);
                         return;
                     }
                 }
