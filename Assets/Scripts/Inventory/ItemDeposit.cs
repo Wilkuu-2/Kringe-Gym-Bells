@@ -1,0 +1,84 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+namespace Inventory
+{
+    [System.Serializable]
+    public struct ItemAndCount
+    {
+        public InventoryItem item;
+        public int count;
+        public int limit;
+
+        // This is legal in foreach loops, += isn't
+        public void addToCount(int addition)
+        {
+            count += addition;
+        }
+    }
+
+    [RequireComponent(typeof(Collider))]
+    public class ItemDeposit : MonoBehaviour
+    {
+
+        public ItemAndCount[] acceptedItems;
+        public int uptakeAmount = 1;
+
+        private void TryDeposit(GameObject target)
+        {
+            if (target.TryGetComponent<PlayerInventory>(out var inventory))
+            {
+                Debug.Log("Has Inventory");
+                int uptakeLeft = uptakeAmount;
+
+                // Loop over all items and remove them if they are in the inventory
+                for (int i = 0; i < acceptedItems.Length; i++)
+                {
+                    var to_take = uptakeLeft;
+                    if (acceptedItems[i].limit > 0)
+                    {
+                        to_take = System.Math.Min(acceptedItems[i].limit - acceptedItems[i].count, to_take);
+                    }
+
+                    var items_taken = inventory.RemoveSpecificItem(acceptedItems[i].item, to_take);
+                    uptakeLeft -= items_taken;
+                    acceptedItems[i].count += items_taken;
+
+                    if (uptakeLeft == 0)
+                        break;
+                }
+            }
+            else if (target.TryGetComponent<GroundItem>(out var gItem))
+            {
+                Debug.Log("Has GroundItem");
+
+                for(int i = 0; i < acceptedItems.Length; i++) 
+                {
+                    if(acceptedItems[i].item == gItem.item){
+                        // Check if over limit 
+                        if (acceptedItems[i].limit > 0 
+                                && acceptedItems[i].count >= acceptedItems[i].limit)
+                            return;
+
+                        // Increment count 
+                        acceptedItems[i].count++;
+                        Destroy(gItem.gameObject);
+                        return;
+                    }
+                }
+
+            }
+        }
+        public void OnTriggerEnter(Collider other)
+        {
+            TryDeposit(other.gameObject);
+        }
+
+        public void OnCollisionEnter(Collision collision)
+        {
+            TryDeposit(collision.gameObject);
+        }
+
+    }
+
+}
