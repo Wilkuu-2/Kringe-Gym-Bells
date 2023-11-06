@@ -6,11 +6,13 @@ namespace Movement {
     public class PlayerController: MonoBehaviour
     {
         public SRLegacy.ObstacleDetector detection;
+        [Tooltip("Don't touch")]
+        public float springMultiplier = 1.0f;
 
         [Header("Camera")]
         public Transform viewCamera;
 
-        private float springNeutralPoint {get => col.bounds.extents.y + o_spring.floatHeight;}
+        private float springNeutralPoint {get => col.bounds.extents.y + (o_spring.floatHeight * springMultiplier);}
 
         [Range(60,10800)]
         [Tooltip("The speed at which the character rotates to the movement")]
@@ -33,6 +35,7 @@ namespace Movement {
         private Animator hb_anim; 
         private Vector2 in_walk;
         private Inventory.PlayerInventory inventory; 
+        private PlayerAnimationManager anim; 
 
         public void MessageTest(Powerup.PickupType type){
             Debug.Log("Player says:");
@@ -49,6 +52,8 @@ namespace Movement {
             // Get all the components
             rb = GetComponent<Rigidbody>();
             col = GetComponent<Collider>();
+            anim = GetComponentInChildren<PlayerAnimationManager>();
+            
             hb_anim = GetComponent<Animator>(); 
             inventory = GetComponent<Inventory.PlayerInventory>();  
             movementVals.Init();
@@ -56,6 +61,11 @@ namespace Movement {
             // TODO: Move somewhere else
             Cursor.lockState = CursorLockMode.Locked; 
         } 
+
+        public void Update(){
+            hb_anim.SetBool("isSliding", state.mode == MovementMode.SLIDE);
+        }
+
         public void FixedUpdate() {
             movementVals.Refresh(inventory);
             
@@ -91,13 +101,15 @@ namespace Movement {
                 Jump(false);
                 
             }
-
+        
         }
 
 
         public bool CanSlide() {
-            // TODO implement speed check
-            return rb.velocity.magnitude > o_walk.slideMinVel && movementVals.CanSlide();
+            // Only slide if in-air or if the speed is adequate
+            return (rb.velocity.magnitude > o_walk.slideMinVel || 
+                    !state.isGrounded) && 
+                movementVals.CanSlide(); // Block sliding if we have the mop
         }
         
         // This function is the entire state machine of the different kinds of movement, excluding input. 
@@ -106,17 +118,16 @@ namespace Movement {
            // EXCLUDES: 
            //   Jump key: ANY -> JUMP 
            //   Slide key: ANY -> SLIDE 
-           //Debug.Log(state.mode.current);
+           Debug.Log(state.mode.current);
            if (state.isGrounded) {
                // Transition out of jumping
                 if (state.mode == MovementMode.SLIDE && !CanSlide()){
                         Debug.Log("Switching to walking bc CanSlide failed");
                         state.mode.Set(MovementMode.WALK);
-                        hb_anim.SetBool("isSliding",false);
                 }
                 // Transition 
                 //else if (state.mode == MovementMode.JUMP && rb.velocity.y > -0.1)
-                //    state.mode.Set(MovementMode.JUMP);
+                //    Untitledstate.mode.Set(MovementMode.JUMP);
                 
                 // Transition from NOT SLIDE OR WALK to WALK 
                 else if (state.mode != MovementMode.WALK && 
@@ -125,8 +136,6 @@ namespace Movement {
                     state.mode.Set(MovementMode.WALK);
                     state.curAirActions = 0; // Reset jumping 
                 }
-                else if (state.mode != MovementMode.SLIDE)
-                    hb_anim.SetBool("isSliding", false);
            } else {
                 // When falling and not sliding go to AIR 
                 if (!((state.mode == MovementMode.JUMP && rb.velocity.y > -0.1) ||
@@ -400,7 +409,6 @@ namespace Movement {
             if(CanSlide()){
                 Debug.Log("Start slide");
                 state.mode.Set(MovementMode.SLIDE);
-                hb_anim.SetBool("isSliding" ,true);
             }
         }
         
@@ -410,7 +418,6 @@ namespace Movement {
             if(!state.nearCeiling.current){
                 state.mode.Set(MovementMode.WALK);
                 Debug.Log("Action: Stop Sliding");
-                 hb_anim.SetBool("isSliding" ,false);
             }
         }
 
@@ -428,7 +435,6 @@ namespace Movement {
                     state.curAirActions += 1;
 
                 state.mode.Set(MovementMode.JUMP);
-                // hb_anim.SetTrigger("a_tJump");
         } 
         void OnJumpStart(){
             state.pressingJump.Set(true); 

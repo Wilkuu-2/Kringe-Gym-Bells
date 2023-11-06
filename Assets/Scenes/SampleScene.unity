@@ -2690,11 +2690,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 28804975860003534, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: mask.m_Bits
-      value: 55
-      objectReference: {fileID: 0}
     - target: {fileID: 169700314888950789, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
         type: 3}
       propertyPath: m_Name
@@ -2749,81 +2744,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.00000003181029
-      objectReference: {fileID: 0}
-    - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -8.504079e-31
-      objectReference: {fileID: 0}
-    - target: {fileID: 736871485651984211, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1224460127295452273, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1841571706839376515, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.00000003181029
-      objectReference: {fileID: 0}
-    - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -8.504079e-31
-      objectReference: {fileID: 0}
-    - target: {fileID: 2602775830333025150, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: movementVals.ground.slideMinVel
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3558150684876971725, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5069317527654646861, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5418801064045481412, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 7306355932918917185, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 9094249830378183355, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2911,6 +2831,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4672019329848836129, guid: dc4ae6472019e14b0925bb9143fe619b,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.31
+      objectReference: {fileID: 0}
+    - target: {fileID: -4672019329848836129, guid: dc4ae6472019e14b0925bb9143fe619b,
+        type: 3}
+      propertyPath: m_Radius
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5815992762776359157, guid: dc4ae6472019e14b0925bb9143fe619b,
         type: 3}
       propertyPath: m_Name
