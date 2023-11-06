@@ -6,11 +6,13 @@ namespace Movement {
     public class PlayerController: MonoBehaviour
     {
         public SRLegacy.ObstacleDetector detection;
+        [Tooltip("Don't touch")]
+        public float springMultiplier = 1.0f;
 
         [Header("Camera")]
         public Transform viewCamera;
 
-        private float springNeutralPoint {get => col.bounds.extents.y + o_spring.floatHeight;}
+        private float springNeutralPoint {get => col.bounds.extents.y + (o_spring.floatHeight * springMultiplier);}
 
         [Range(60,10800)]
         [Tooltip("The speed at which the character rotates to the movement")]
@@ -116,7 +118,7 @@ namespace Movement {
            // EXCLUDES: 
            //   Jump key: ANY -> JUMP 
            //   Slide key: ANY -> SLIDE 
-           //Debug.Log(state.mode.current);
+           Debug.Log(state.mode.current);
            if (state.isGrounded) {
                // Transition out of jumping
                 if (state.mode == MovementMode.SLIDE && !CanSlide()){
@@ -125,7 +127,7 @@ namespace Movement {
                 }
                 // Transition 
                 //else if (state.mode == MovementMode.JUMP && rb.velocity.y > -0.1)
-                //    state.mode.Set(MovementMode.JUMP);
+                //    Untitledstate.mode.Set(MovementMode.JUMP);
                 
                 // Transition from NOT SLIDE OR WALK to WALK 
                 else if (state.mode != MovementMode.WALK && 

@@ -1159,7 +1159,7 @@ Transform:
   m_GameObject: {fileID: 630756681}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4879, y: 6.9667, z: 138.7183}
+  m_LocalPosition: {x: 1.4879, y: 8.4, z: 138.7183}
   m_LocalScale: {x: 39.625954, y: 33.967773, z: 1.1099927}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5435,6 +5435,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 670030787155379603, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0000000540989
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867737942503360804, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0000000540989
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602775830333025150, guid: ae27f1c0ef374299ca1df1bb4e43c2e1,
+        type: 3}
+      propertyPath: movementVals.ground.slideMinVel
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
