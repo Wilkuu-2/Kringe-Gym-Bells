@@ -17,6 +17,7 @@ namespace Inventory
 
         [SerializeField][ReadOnly] List<InventoryItem> items;
         [SerializeField][ReadOnly] Movement.MovementEffectValues inventoryEffects; 
+        public float throwImpulse = 1000f; 
         private bool effectsInvalidated = true;
         private Rigidbody rb; 
 
@@ -97,8 +98,18 @@ namespace Inventory
             InventoryItem? item = PopItem();
             if(item == null) 
                 return;
+            
 
-            var dropped = item.SpawnGroundItem(transform, rb); 
+            GroundItem? dropped = item.SpawnGroundItem(transform);
+            
+            if (dropped is not null){
+                if(dropped.TryGetComponent<Rigidbody>(out Rigidbody itemrb)){
+                    itemrb.velocity = rb.velocity;
+                    itemrb.AddForce(transform.forward * throwImpulse, ForceMode.Impulse);
+                }
+            }
+
+            
         } 
 
     }

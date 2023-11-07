@@ -21,18 +21,14 @@ namespace Inventory {
             }
         }
 
-        public bool SpawnGroundItem(Transform drop_transform, Rigidbody rb){
+        public GroundItem? SpawnGroundItem(Transform drop_transform){
             if(!droppable)
-                return false;
+                return null;
 
             GroundItem item = Instantiate(itemPrefab, drop_transform.position, drop_transform.rotation);
             item.pickupDelay.Set();
             
-            if(item.TryGetComponent<Rigidbody>(out Rigidbody itemrb)){
-                itemrb.velocity = rb.velocity;
-            }
-
-            return true; 
+            return item; 
         }
     }
 
