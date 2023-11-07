@@ -4,6 +4,7 @@ using UnityEngine;
 public class TimerEditArea : MonoBehaviour
 {
     public enum AreaKind {
+        START,
         RESTART, 
         PAUSE, 
         PAUSEPERM,
@@ -15,6 +16,9 @@ public class TimerEditArea : MonoBehaviour
     public void OnTriggerEnter(Collider other){
         if(other.gameObject.tag == PlayerTag){
             switch (kind) {
+                case AreaKind.START: 
+                    timerui.timer.StartTimer();
+                    break;
                 case AreaKind.RESTART:
                     timerui.timer.Restart();
                 break; 

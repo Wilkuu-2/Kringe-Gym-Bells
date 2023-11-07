@@ -27,6 +27,10 @@ namespace Inventory
             rb = GetComponent<Rigidbody>(); 
         }
 
+        public int ItemAmount(){
+            return items.Count();
+        } 
+
         public InventoryOpOutcome AddItem(InventoryItem item, bool unique = false)
         {
             if(items.Find(i => i == item) && unique){
