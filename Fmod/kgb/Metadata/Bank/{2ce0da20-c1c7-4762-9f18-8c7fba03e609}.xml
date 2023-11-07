@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="Bank" id="{2ce0da20-c1c7-4762-9f18-8c7fba03e609}">
+		<property name="name">
+			<value>OneShotGlobal</value>
+		</property>
+		<relationship name="folder">
+			<destination>{359af934-3097-49ec-b768-796d79cb14ed}</destination>
+		</relationship>
+	</object>
+</objects>

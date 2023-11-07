@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="ParameterPreset" id="{db1a06a5-cf8d-4dcc-9f7c-9ee9b39e72a3}">
+		<property name="name">
+			<value>JumpCount</value>
+		</property>
+		<relationship name="folder">
+			<destination>{e7bb3763-3598-45c1-97f1-2e7d6b006d3e}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{e7a25ca9-4119-42cc-8d1a-08d90a9d91e3}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{e7a25ca9-4119-42cc-8d1a-08d90a9d91e3}">
+		<property name="parameterType">
+			<value>1</value>
+		</property>
+		<property name="maximum">
+			<value>11</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>
