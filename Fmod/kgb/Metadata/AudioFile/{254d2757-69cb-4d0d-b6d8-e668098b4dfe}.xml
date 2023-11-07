@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{254d2757-69cb-4d0d-b6d8-e668098b4dfe}">
+		<property name="assetPath">
+			<value>327610__rickaldo09__rolling-weights.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>73.928163265306125</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{546f259c-78b6-4c0e-ab84-69a29259888b}</destination>
+		</relationship>
+	</object>
+</objects>

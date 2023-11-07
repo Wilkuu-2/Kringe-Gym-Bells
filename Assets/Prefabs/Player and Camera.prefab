@@ -61,7 +61,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458991730644271648}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.0000000540989, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -437,8 +437,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3629666273077804228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.0000000540989, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
+  m_LocalRotation: {x: -1e-45, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.9, y: 6.7699995, z: -17.779999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -649,12 +649,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2604691327270498205}
   - component: {fileID: 8037420118353025435}
+  - component: {fileID: 9190833839477661766}
   - component: {fileID: 8100142041447016082}
   - component: {fileID: 585517959565517733}
   - component: {fileID: 6823921025787118070}
   - component: {fileID: 2602775830333025150}
   - component: {fileID: 4115869892928038624}
-  - component: {fileID: 9190833839477661766}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -703,6 +703,27 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &9190833839477661766
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5418801064045481412}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.78, y: 1, z: 0.76}
+  m_Center: {x: 0, y: 0.37, z: 0}
 --- !u!54 &8100142041447016082
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -795,6 +816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detection: {fileID: 8091663841912871180}
+  springMultiplier: 1
   viewCamera: {fileID: 1867737942503360804}
   rotationSpeed: 3600
   movementVals:
@@ -904,28 +926,8 @@ MonoBehaviour:
     blockSlide: 0
     blockJump: 0
     enableAutoBhop: 0
+  throwImpulse: 1000
   capacity: 5
---- !u!65 &9190833839477661766
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5418801064045481412}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.78, y: 1, z: 0.76}
-  m_Center: {x: 0, y: 0.37, z: 0}
 --- !u!1 &6665161678643705263
 GameObject:
   m_ObjectHideFlags: 0
