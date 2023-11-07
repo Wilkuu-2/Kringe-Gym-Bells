@@ -28,5 +28,8 @@
 		<relationship name="profilerSessionFolder">
 			<destination>{f4288aa4-293c-4d1c-90f9-919bb6d1d9bc}</destination>
 		</relationship>
+		<relationship name="platforms">
+			<destination>{13afeccc-6525-4c72-aab1-c409dec4147b}</destination>
+		</relationship>
 	</object>
 </objects>

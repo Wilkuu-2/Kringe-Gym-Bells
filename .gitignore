@@ -90,6 +90,9 @@ crashlytics-build.properties
 # Log files can be ignored.
 fmod_editor.log
 #Fmod
+Fmod/*/.cache
+Fmod/*/Build 
+
 
 # Skip vscode stuff
 .vsconfig
