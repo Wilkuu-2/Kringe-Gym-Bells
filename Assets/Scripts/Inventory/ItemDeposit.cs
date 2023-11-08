@@ -55,6 +55,7 @@ namespace Inventory
                 if (uptakeLeftStart > uptakeLeft){
                     FMODUnity.RuntimeManager.PlayOneShot(depositSound,transform.position);
                 }
+                inventory.checkFMOD();
             }
             else if (target.TryGetComponent<GroundItem>(out var gItem))
             {
