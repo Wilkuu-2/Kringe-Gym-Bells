@@ -35,7 +35,7 @@ namespace Inventory
         }
 
 
-        private void checkFMOD()
+        public void checkFMOD()
         {
             float percussion = (items.Find(i => i.name == "Dumbell")) ? 0 : 1;
             FMODEmitter.SetParameter("IsPercussionPlaying", percussion);
@@ -43,7 +43,7 @@ namespace Inventory
             float guitar = (items.Find(i => i.name == "Weight")) ? 0 : 1;
             FMODEmitter.SetParameter("IsGuitarPlaying", guitar);
 
-            float strings = (items.Find(i => i.name == "Mop")) ? 0 : 1;
+            float strings = (items.Find(i => i.name == "Barbell")) ? 0 : 1;
             FMODEmitter.SetParameter("IsStringsPlaying", strings);
 
         }
