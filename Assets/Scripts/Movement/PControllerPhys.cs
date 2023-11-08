@@ -45,6 +45,7 @@ namespace Movement
         private Inventory.PlayerInventory inventory;
         private PlayerAnimationManager anim;
 
+
         public void MessageTest(Powerup.PickupType type)
         {
             Debug.Log("Player says:");
@@ -511,6 +512,7 @@ namespace Movement
                 state.curAirActions += 1;
             
             FMODUnity.RuntimeManager.PlayOneShot(soundJumpEvent, transform.position);
+            anim.doJump();
             state.mode.Set(MovementMode.JUMP);
         }
         void OnJumpStart()

@@ -22,6 +22,12 @@ namespace Movement {
             playerRb = GetComponentInParent<Rigidbody>();
         }
 
+        public void doJump()
+        {
+            anim.SetTrigger("doJump");
+        }
+
+
         void Update()
         {
             isJumping = player.state.mode == MovementMode.JUMP; 

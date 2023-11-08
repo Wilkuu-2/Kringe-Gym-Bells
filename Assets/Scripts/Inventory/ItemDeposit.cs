@@ -23,13 +23,16 @@ namespace Inventory
 
         public ItemAndCount[] acceptedItems;
         public int uptakeAmount = 1;
+        public int capacity = 4;
 
         private void TryDeposit(GameObject target)
         {
+            int currentTotal = TotalAmount(); 
+
             if (target.TryGetComponent<PlayerInventory>(out var inventory))
             {
                 Debug.Log("Has Inventory");
-                int uptakeLeft = uptakeAmount;
+                int uptakeLeft = System.Math.Min(uptakeAmount, capacity - currentTotal);
 
                 // Loop over all items and remove them if they are in the inventory
                 for (int i = 0; i < acceptedItems.Length; i++)
@@ -52,6 +55,12 @@ namespace Inventory
             {
                 Debug.Log("Has GroundItem");
 
+                if(TotalAmount() >= capacity)
+                    return; // Full 
+
+                if(gItem.pickedUp)
+                    return; //Already picked up
+
                 for(int i = 0; i < acceptedItems.Length; i++) 
                 {
                     if(acceptedItems[i].item == gItem.item){
@@ -61,24 +70,33 @@ namespace Inventory
                             return;
 
                         // Increment count 
-                        acceptedItems[i].count++;
+                        gItem.pickedUp = true; 
                         Destroy(gItem.gameObject);
+                        acceptedItems[i].count++;
                         return;
                     }
                 }
 
             }
         }
-        public void OnTriggerEnter(Collider other)
-        {
-            TryDeposit(other.gameObject);
-        }
+        //public void OnTriggerEnter(Collider other)
+        //{
+        //    TryDeposit(other.gameObject);
+        //}
 
         public void OnCollisionEnter(Collision collision)
         {
             TryDeposit(collision.gameObject);
         }
 
+        public int TotalAmount(){
+            int total = 0;
+            foreach (var item in acceptedItems){
+                total += item.count; 
+            }
+            return total;
+        }
+    
     }
 
 }
