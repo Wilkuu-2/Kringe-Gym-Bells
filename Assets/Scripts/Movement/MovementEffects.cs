@@ -10,6 +10,7 @@ namespace Movement {
         public float groundAccelChange; 
         public float airSpeedChange; 
         public float airAccelChange; 
+        public float jumpVelocityChange; 
         public int inAirActionChange;
         public float duration; 
         public bool  blockSlide; 
@@ -30,6 +31,7 @@ namespace Movement {
             groundAccelChange    += b.groundAccelChange;
             airSpeedChange    += b.airSpeedChange;
             airAccelChange    += b.airAccelChange;
+            jumpVelocityChange    += b.jumpVelocityChange;
             inAirActionChange      += b.inAirActionChange;
             // Duration should not be used in summed effects, use the stack instead
             // duration             = duration < b.duration ? duration : b.duration 

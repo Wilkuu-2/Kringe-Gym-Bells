@@ -7,12 +7,6 @@ public class LevelManager : MonoBehaviour
     public GameObject startArea;
     public PlayerInventory inventory; 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {

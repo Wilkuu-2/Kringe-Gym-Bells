@@ -24,6 +24,7 @@ namespace Inventory
         public ItemAndCount[] acceptedItems;
         public int uptakeAmount = 1;
         public int capacity = 4;
+        public FMODUnity.EventReference depositSound; 
 
         private void TryDeposit(GameObject target)
         {
@@ -33,6 +34,7 @@ namespace Inventory
             {
                 Debug.Log("Has Inventory");
                 int uptakeLeft = System.Math.Min(uptakeAmount, capacity - currentTotal);
+                int uptakeLeftStart = uptakeLeft;
 
                 // Loop over all items and remove them if they are in the inventory
                 for (int i = 0; i < acceptedItems.Length; i++)
@@ -49,6 +51,9 @@ namespace Inventory
 
                     if (uptakeLeft == 0)
                         break;
+                }
+                if (uptakeLeftStart > uptakeLeft){
+                    FMODUnity.RuntimeManager.PlayOneShot(depositSound,transform.position);
                 }
             }
             else if (target.TryGetComponent<GroundItem>(out var gItem))
@@ -73,6 +78,7 @@ namespace Inventory
                         gItem.pickedUp = true; 
                         Destroy(gItem.gameObject);
                         acceptedItems[i].count++;
+                        FMODUnity.RuntimeManager.PlayOneShot(depositSound,transform.position);
                         return;
                     }
                 }

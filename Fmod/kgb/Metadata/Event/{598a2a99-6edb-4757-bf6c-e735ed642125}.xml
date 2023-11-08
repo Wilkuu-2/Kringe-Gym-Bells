@@ -5,7 +5,7 @@
 			<value>DepositEvent</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{b9f79d02-be5a-43c5-a219-f6ad4adee970}</destination>
@@ -38,6 +38,9 @@
 		</relationship>
 	</object>
 	<object class="MasterTrack" id="{abb8b159-c0ac-4d18-96ca-b5da27529494}">
+		<relationship name="modules">
+			<destination>{95d7f507-8d58-47c4-948e-e11ec1c49209}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{6948a959-f521-47d1-8568-f8bef29af21e}</destination>
 		</relationship>
@@ -56,11 +59,14 @@
 	<object class="EventAutomatableProperties" id="{a18d066b-3a5e-4059-846a-5b841ad07052}" />
 	<object class="MarkerTrack" id="{7dbb7de9-1291-43d1-a976-34f732bc9bc8}" />
 	<object class="Timeline" id="{4800744b-a676-420b-b007-13be95da2be8}">
-		<property name="isProxyEnabled">
-			<value>false</value>
-		</property>
+		<relationship name="modules">
+			<destination>{95d7f507-8d58-47c4-948e-e11ec1c49209}</destination>
+		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{6948a959-f521-47d1-8568-f8bef29af21e}">
+		<property name="volume">
+			<value>-5</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{9abedb28-e416-40ac-8a7f-d06623e455da}</destination>
 		</relationship>
@@ -69,6 +75,17 @@
 		</relationship>
 		<relationship name="mixer">
 			<destination>{8ae3109d-7ee8-4b2a-90e7-1542c861a9f7}</destination>
+		</relationship>
+	</object>
+	<object class="SingleSound" id="{95d7f507-8d58-47c4-948e-e11ec1c49209}">
+		<property name="length">
+			<value>2.2999999999999998</value>
+		</property>
+		<property name="timelockedOffset">
+			<value>7.6000000000000005</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{254d2757-69cb-4d0d-b6d8-e668098b4dfe}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{a14f2ed0-2f50-40e7-8983-8c4c3e6ed1ae}">
@@ -80,9 +97,11 @@
 	<object class="MixerBusEffectChain" id="{9abedb28-e416-40ac-8a7f-d06623e455da}">
 		<relationship name="effects">
 			<destination>{a776019e-9bcd-40b5-a018-7f4533b64538}</destination>
+			<destination>{6d0f6d46-39d4-4e40-adee-245a508d4fed}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{aaaf6399-3528-400d-abce-f185d8210872}" />
 	<object class="MixerBusFader" id="{23db4e65-9cef-46cd-b602-d0a1c0e585f5}" />
 	<object class="MixerBusFader" id="{a776019e-9bcd-40b5-a018-7f4533b64538}" />
+	<object class="SpatialiserEffect" id="{6d0f6d46-39d4-4e40-adee-245a508d4fed}" />
 </objects>

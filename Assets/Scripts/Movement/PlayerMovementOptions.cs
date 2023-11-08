@@ -144,7 +144,7 @@ namespace Movement{
             appliedAir = air.Copy();
             appliedAir.enableJump = appliedAir.enableJump && !allEffects.blockJump;
             appliedAir.auto_bhop = appliedAir.auto_bhop && !allEffects.enableAutoBhop;
-            appliedAir.inAirAcceleration += allEffects.airAccelChange;
+            appliedAir.velocity += allEffects.jumpVelocityChange;
             appliedAir.inAirMaxSpeed += allEffects.airSpeedChange;
             appliedAir.maxInAirActions += allEffects.inAirActionChange; 
             

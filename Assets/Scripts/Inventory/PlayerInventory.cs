@@ -26,6 +26,10 @@ namespace Inventory
 
         public int capacity = 5;
         
+        [Header("Sound")]
+        public FMODUnity.EventReference pickupSound;
+        public FMODUnity.EventReference dropSound;
+
         public void Start(){
             rb = GetComponent<Rigidbody>(); 
         }
@@ -60,6 +64,7 @@ namespace Inventory
             
             items.Add(item); 
             effectsInvalidated = true; 
+            FMODUnity.RuntimeManager.PlayOneShot(pickupSound,transform.position);
             return InventoryOpOutcome.SUCCESS; 
         }
 
@@ -128,6 +133,7 @@ namespace Inventory
                 if(dropped.TryGetComponent<Rigidbody>(out Rigidbody itemrb)){
                     itemrb.velocity = rb.velocity;
                     itemrb.AddForce(transform.forward * throwImpulse, ForceMode.Impulse);
+                    FMODUnity.RuntimeManager.PlayOneShot(dropSound,transform.position);
                 }
             }
 
