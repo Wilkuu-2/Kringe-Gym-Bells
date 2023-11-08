@@ -120,6 +120,7 @@
 		</relationship>
 		<relationship name="markers">
 			<destination>{994570e6-4808-4df0-8bfa-a63fa4004696}</destination>
+			<destination>{772d0c53-20a1-4f45-ad38-0f83783d6a59}</destination>
 		</relationship>
 	</object>
 	<object class="ParameterProxy" id="{bb47f0a2-bd6c-4290-bbbd-1ece60412f16}">
@@ -297,6 +298,20 @@
 		</property>
 		<property name="tempo">
 			<value>130</value>
+		</property>
+		<relationship name="timeline">
+			<destination>{7c4a7965-74e5-4fc2-bfdd-98173aec834b}</destination>
+		</relationship>
+		<relationship name="markerTrack">
+			<destination>{f82d5473-1056-4c1e-a1a6-28cb8fe2d8ab}</destination>
+		</relationship>
+	</object>
+	<object class="LoopRegion" id="{772d0c53-20a1-4f45-ad38-0f83783d6a59}">
+		<property name="position">
+			<value>0</value>
+		</property>
+		<property name="length">
+			<value>7.384615384615385</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{7c4a7965-74e5-4fc2-bfdd-98173aec834b}</destination>

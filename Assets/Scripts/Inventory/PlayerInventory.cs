@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.InputSystem;
+using FMODUnity;
 
 namespace Inventory
 {
@@ -16,7 +17,9 @@ namespace Inventory
     {
 
         [SerializeField][ReadOnly] List<InventoryItem> items;
-        [SerializeField][ReadOnly] Movement.MovementEffectValues inventoryEffects; 
+        [SerializeField][ReadOnly] Movement.MovementEffectValues inventoryEffects;
+        [SerializeField] private StudioEventEmitter FMODEmitter;
+        
         public float throwImpulse = 1000f; 
         private bool effectsInvalidated = true;
         private Rigidbody rb; 
@@ -25,6 +28,20 @@ namespace Inventory
         
         public void Start(){
             rb = GetComponent<Rigidbody>(); 
+        }
+
+
+        private void checkFMOD()
+        {
+            float percussion = (items.Find(i => i.name == "Dumbell")) ? 0 : 1;
+            FMODEmitter.SetParameter("IsPercussionPlaying", percussion);
+
+            float guitar = (items.Find(i => i.name == "Weight")) ? 0 : 1;
+            FMODEmitter.SetParameter("IsGuitarPlaying", guitar);
+
+            float strings = (items.Find(i => i.name == "Mop")) ? 0 : 1;
+            FMODEmitter.SetParameter("IsStringsPlaying", strings);
+
         }
 
         public int ItemAmount(){
@@ -85,6 +102,7 @@ namespace Inventory
             bool _invalidated = effectsInvalidated; 
 
             if (effectsInvalidated){
+                checkFMOD();
                 inventoryEffects = Movement.MovementEffectValues.newEmpty("Inventory");
                 inventoryEffects.duration = 99999999999999999f;
                 foreach(InventoryItem item in items){
