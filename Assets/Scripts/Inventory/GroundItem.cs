@@ -7,6 +7,7 @@ namespace Inventory {
         public bool disappearOnPickup = true; 
         public bool onlyOne = true; 
         public TimeLimitedAction pickupDelay;
+        [HideInInspector] public bool pickedUp = false;
         
         void Start(){
             pickupDelay.Set(); 
