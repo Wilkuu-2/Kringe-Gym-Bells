@@ -14,43 +14,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Powerup:PickupEffectSettings
   proteinEffects:
     values:
-      name: 
+      name: Protein
       groundSpeedChange: 0
       groundAccelChange: 0
       airSpeedChange: 0
       airAccelChange: 0
+      jumpVelocityChange: 0
       inAirActionChange: 0
       duration: 0
       blockSlide: 0
       blockJump: 0
-      enableAutoBhop: 0
+      enableAutoBhop: 1
     sendMessage: 0
     sendType: 0
     messageName: 
   creatineEffects:
     values:
-      name: Creatine
+      name: Creatine - Super Jump
       groundSpeedChange: 0
       groundAccelChange: 0
-      airSpeedChange: 10
-      airAccelChange: 2000
-      inAirActionChange: 1
-      duration: 2
+      airSpeedChange: 5
+      airAccelChange: 1000
+      jumpVelocityChange: 8
+      inAirActionChange: 0
+      duration: 5
       blockSlide: 0
       blockJump: 0
-      enableAutoBhop: 1
-    sendMessage: 1
+      enableAutoBhop: 0
+    sendMessage: 0
     sendType: 0
     messageName: OnJumpStart
   preworkoutEffects:
     values:
-      name: 
-      groundSpeedChange: 0
-      groundAccelChange: 0
+      name: Preworkout -Speed Boost
+      groundSpeedChange: 18
+      groundAccelChange: 1000
       airSpeedChange: 0
       airAccelChange: 0
+      jumpVelocityChange: 0
       inAirActionChange: 0
-      duration: 0
+      duration: 12
       blockSlide: 0
       blockJump: 0
       enableAutoBhop: 0
@@ -59,13 +62,14 @@ MonoBehaviour:
     messageName: 
   gripEffects:
     values:
-      name: 
+      name: Grip - Air Control Boost
       groundSpeedChange: 0
       groundAccelChange: 0
-      airSpeedChange: 0
-      airAccelChange: 0
+      airSpeedChange: 12
+      airAccelChange: 1000
+      jumpVelocityChange: 0
       inAirActionChange: 0
-      duration: 0
+      duration: 15
       blockSlide: 0
       blockJump: 0
       enableAutoBhop: 0
@@ -79,8 +83,9 @@ MonoBehaviour:
       groundAccelChange: 0
       airSpeedChange: 0
       airAccelChange: 0
-      inAirActionChange: 0
-      duration: 0
+      jumpVelocityChange: 0
+      inAirActionChange: 1
+      duration: 15
       blockSlide: 0
       blockJump: 0
       enableAutoBhop: 0
