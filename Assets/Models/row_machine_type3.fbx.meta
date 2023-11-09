@@ -1,9 +1,74 @@
 fileFormatVersion: 2
-guid: eed8207ca3e2c004aa7523cc71bbcc39
+guid: aec503f31a463d547b26fb5dffe6703c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlackMetal
+    second: {fileID: 2100000, guid: e129ef53e0ba5db4c98d857c769ba4cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cushion
+    second: {fileID: 2100000, guid: a9f472a0340937240b5925af60ac1705, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Diamond
+    second: {fileID: 2100000, guid: 0d44e5b7f10e3fa4c83c1a645dd2ef71, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Frame
+    second: {fileID: 2100000, guid: 82e76782028c1f64a843907f81452a79, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Frame Metal
+    second: {fileID: 2100000, guid: 9222ac8c7847d9e48b57f8c1fe01e866, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RedMetal
+    second: {fileID: 2100000, guid: 84f21cccb13d91542b596806ed945ea3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TexturedCushion
+    second: {fileID: 2100000, guid: c214d8670da96af47a2a4d3372bf26e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: White
+    second: {fileID: 2100000, guid: 688fa8ddd82f7a544aadd20a1ae40e77, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DiamondPlate008D_2K-PNG_Color
+    second: {fileID: 2800000, guid: a9b31eafac186c447ae0f59431dd9993, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DiamondPlate008D_2K-PNG_NormalGL
+    second: {fileID: 2800000, guid: be1b202a1bfbd744980d74b4e5501982, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: DiamondPlate008D_2K-PNG_Roughness
+    second: {fileID: 2800000, guid: 2fc8902ad7d6902448b6ea3b2ba4cad9, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Leather026_2K-PNG_Color
+    second: {fileID: 2800000, guid: c1290486f9b86174ebc6c7332d908937, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Metal046B_2K-PNG_Color
+    second: {fileID: 2800000, guid: b3dff128c2de7b040a9da9c5aa981dd9, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
