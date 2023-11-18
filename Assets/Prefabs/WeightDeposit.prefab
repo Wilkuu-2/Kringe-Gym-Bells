@@ -169,11 +169,11 @@ MonoBehaviour:
   capacity: 5
   depositSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1502227097
+      Data2: 1196912347
+      Data3: 904359103
+      Data4: 622945517
+    Path: event:/DepositEvent
 --- !u!114 &8316945291516980966
 MonoBehaviour:
   m_ObjectHideFlags: 0

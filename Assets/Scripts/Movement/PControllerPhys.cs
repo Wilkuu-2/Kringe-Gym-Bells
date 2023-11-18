@@ -24,7 +24,7 @@ namespace Movement
         public FMODUnity.EventReference soundFailEvent;
         public FMODUnity.EventReference soundWalkloop;
 
-        private FMOD.Studio.EventInstance walkInstance;
+        private FMODUnity.StudioEventEmitter walkEmitter;
 
 
         [Header("Settings")]
@@ -60,9 +60,8 @@ namespace Movement
 
         public void Start()
         {
-            walkInstance = FMODUnity.RuntimeManager.CreateInstance(soundWalkloop);
-            walkInstance.setParameterByName("MovementType", 2);
-            walkInstance.start();
+            walkEmitter = GetComponent<FMODUnity.StudioEventEmitter>();
+            walkEmitter.SetParameter("MovementType", 1);
 
             // Get all the components
             rb = GetComponent<Rigidbody>();
@@ -192,14 +191,14 @@ namespace Movement
         {
             if (state.mode == MovementMode.WALK && ViewAdjustedInput().magnitude > 0)
             {
-                walkInstance.setParameterByName("MovementType", 0);
+                walkEmitter.SetParameter("MovementType", 0);
             }
             else if (state.mode == MovementMode.SLIDE)
             {
-                walkInstance.setParameterByName("MovementType", 1);
+                walkEmitter.SetParameter("MovementType", 1);
             } else
             {
-                walkInstance.setParameterByName("MovementType", 2);
+                walkEmitter.SetParameter("MovementType", 2);
             }
         }
 
@@ -485,6 +484,8 @@ namespace Movement
             {
                 Debug.Log("Start slide");
                 state.mode.Set(MovementMode.SLIDE);
+            } else {
+                FMODUnity.RuntimeManager.PlayOneShot(soundFailEvent, transform.position);
             }
         }
 

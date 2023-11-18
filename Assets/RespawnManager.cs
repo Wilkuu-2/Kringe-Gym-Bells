@@ -6,8 +6,8 @@ using UnityEngine;
 public class RespawnManager : MonoBehaviour
 {
 
-    private Transform respawnPoint;
-    private Vector3 offset = new Vector3(0, 3, 0);
+    public Transform respawnPoint;
+    public Vector3 offset = new Vector3(0, 3, 0);
 
     void Start()
     {
@@ -40,11 +40,8 @@ public class RespawnManager : MonoBehaviour
         }
         else
         {
+            Debug.LogWarning("No respawn point found!");
             transform.position = new Vector3 (142, 0, 49) + offset;
-        }
-        if(gameObject.GetComponent<GroundItem>())
-        {
-            gameObject.GetComponent<GroundItem>().resetSelf();
         }
     }
 }

@@ -62,7 +62,7 @@ Transform:
   m_GameObject: {fileID: 458991730644271648}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.56999993, z: -9.37}
+  m_LocalPosition: {x: 0, y: 0.56999993, z: -9.369999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -422,6 +422,7 @@ GameObject:
   - component: {fileID: 7138216869480597635}
   - component: {fileID: 487425131627651985}
   - component: {fileID: 4819852978235069936}
+  - component: {fileID: 3016620829053059109}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -437,8 +438,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3629666273077804228}
   serializedVersion: 2
-  m_LocalRotation: {x: -1e-45, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.9, y: 6.7699995, z: -17.779999}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.56999993, z: -9.369999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -586,6 +587,45 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3016620829053059109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3629666273077804228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1243234027
+      Data2: 1337496292
+      Data3: -718270018
+      Data4: 928544857
+    Path: event:/GameMusic
+  Event: 
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params:
+  - Name: isDrumsPlaying
+    Value: 1
+  - Name: isGuitarPlaying
+    Value: 1
+  - Name: isPercussionPlaying
+    Value: 1
+  - Name: isStringsPlaying
+    Value: 1
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &5069317527654646861
 GameObject:
   m_ObjectHideFlags: 0
@@ -655,6 +695,7 @@ GameObject:
   - component: {fileID: 6823921025787118070}
   - component: {fileID: 2602775830333025150}
   - component: {fileID: 4115869892928038624}
+  - component: {fileID: 8869759299820559162}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -819,6 +860,27 @@ MonoBehaviour:
   springMultiplier: 1
   viewCamera: {fileID: 1867737942503360804}
   rotationSpeed: 3600
+  soundJumpEvent:
+    Guid:
+      Data1: 413350736
+      Data2: 1219979802
+      Data3: -1975474794
+      Data4: -377351427
+    Path: event:/JumpEvent
+  soundFailEvent:
+    Guid:
+      Data1: -419124140
+      Data2: 1320215435
+      Data3: -1364238707
+      Data4: -1584879377
+    Path: event:/FailEvent
+  soundWalkloop:
+    Guid:
+      Data1: 831251390
+      Data2: 1278735668
+      Data3: -247675479
+      Data4: 1337347350
+    Path: event:/PlayerMovement
   movementVals:
     spring:
       floatHeight: 0.65
@@ -830,8 +892,8 @@ MonoBehaviour:
     ground:
       walkAcc: 9000
       runAcc: 9000
-      walkSpeedMax: 30
-      runSpeedMax: 30
+      walkSpeedMax: 40
+      runSpeedMax: 40
       walkDrag: 80
       slideDrag: 9.56
       slideMinVel: 3
@@ -854,6 +916,7 @@ MonoBehaviour:
       groundAccelChange: 0
       airSpeedChange: 0
       airAccelChange: 0
+      jumpVelocityChange: 0
       inAirActionChange: 0
       duration: 0
       blockSlide: 0
@@ -865,6 +928,7 @@ MonoBehaviour:
       groundAccelChange: 0
       airSpeedChange: 0
       airAccelChange: 0
+      jumpVelocityChange: 0
       inAirActionChange: 0
       duration: 0
       blockSlide: 0
@@ -876,6 +940,7 @@ MonoBehaviour:
       groundAccelChange: 0
       airSpeedChange: 0
       airAccelChange: 0
+      jumpVelocityChange: 0
       inAirActionChange: 0
       duration: 0
       blockSlide: 0
@@ -921,13 +986,41 @@ MonoBehaviour:
     groundAccelChange: 0
     airSpeedChange: 0
     airAccelChange: 0
+    jumpVelocityChange: 0
     inAirActionChange: 0
     duration: 0
     blockSlide: 0
     blockJump: 0
     enableAutoBhop: 0
-  throwImpulse: 1000
+  FMODEmitter: {fileID: 3016620829053059109}
+  throwImpulse: 25
   capacity: 5
+  pickupSound:
+    Guid:
+      Data1: 1502227097
+      Data2: 1196912347
+      Data3: 904359103
+      Data4: 622945517
+    Path: event:/DepositEvent
+  dropSound:
+    Guid:
+      Data1: -1366878737
+      Data2: 1286558094
+      Data3: 314778525
+      Data4: 866637887
+    Path: event:/ThrowEvent
+--- !u!114 &8869759299820559162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5418801064045481412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf0241af33cb5f54a99650b9ce02236d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6665161678643705263
 GameObject:
   m_ObjectHideFlags: 0

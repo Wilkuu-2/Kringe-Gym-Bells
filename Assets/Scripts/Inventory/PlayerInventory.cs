@@ -133,10 +133,6 @@ namespace Inventory
             
             if (dropped is not null){
                 if(dropped.TryGetComponent<Rigidbody>(out Rigidbody itemrb)){
-                    if(dropped.TryGetComponent<GroundItem>(out GroundItem itemscript))
-                    {
-                        itemscript.setFlying(false);
-                    }
                     if(dropped.TryGetComponent<RespawnManager>(out RespawnManager manager))
                     {
                         manager.setRespawnPoint(resp.getRespawnPoint());
