@@ -17,6 +17,8 @@ namespace Inventory
         }
     }
 
+
+
     [RequireComponent(typeof(Collider))]
     public class ItemDeposit : MonoBehaviour
     {
@@ -24,7 +26,14 @@ namespace Inventory
         public ItemAndCount[] acceptedItems;
         public int uptakeAmount = 1;
         public int capacity = 4;
-        public FMODUnity.EventReference depositSound; 
+        public FMODUnity.EventReference depositSound;
+        private ParticleSystem parts;
+
+        private void Start()
+        {
+            parts = GetComponent<ParticleSystem>();
+            parts.Stop();
+        }
 
         private void TryDeposit(GameObject target)
         {
@@ -50,6 +59,8 @@ namespace Inventory
                     acceptedItems[i].count += items_taken;
 
                     if (uptakeLeft == 0)
+                        Debug.Log("Full");
+                        parts.Play();
                         break;
                 }
                 if (uptakeLeftStart > uptakeLeft){
@@ -61,8 +72,10 @@ namespace Inventory
             {
                 Debug.Log("Has GroundItem");
 
-                if(TotalAmount() >= capacity)
-                    return; // Full 
+                if (TotalAmount() >= capacity) {
+                    parts.Play();
+                    return;
+                } // Full 
 
                 if(gItem.pickedUp)
                     return; //Already picked up

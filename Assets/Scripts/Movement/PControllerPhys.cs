@@ -44,7 +44,7 @@ namespace Movement
         private Vector2 in_walk;
         private Inventory.PlayerInventory inventory;
         private PlayerAnimationManager anim;
-
+        private RespawnManager resp;
 
         public void MessageTest(Powerup.PickupType type)
         {
@@ -68,6 +68,7 @@ namespace Movement
             rb = GetComponent<Rigidbody>();
             col = GetComponent<Collider>();
             anim = GetComponentInChildren<PlayerAnimationManager>();
+            resp = GetComponent<RespawnManager>();
 
             hb_anim = GetComponent<Animator>();
             inventory = GetComponent<Inventory.PlayerInventory>();
@@ -91,6 +92,11 @@ namespace Movement
             if (detection[SRLegacy.DIR.DOWN])
             {
                 state.isGrounded.Set(detection[SRLegacy.DIR.DOWN].getPoint().y > (transform.position.y - springNeutralPoint));
+                Transform item = detection[SRLegacy.DIR.DOWN].getRayHit().transform;
+                if (item.gameObject.CompareTag("Respawn"))
+                {
+                    resp.setRespawnPoint(item);
+                }
             }
             else
             {

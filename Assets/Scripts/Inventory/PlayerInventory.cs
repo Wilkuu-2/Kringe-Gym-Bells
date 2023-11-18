@@ -20,9 +20,10 @@ namespace Inventory
         [SerializeField][ReadOnly] Movement.MovementEffectValues inventoryEffects;
         [SerializeField] private StudioEventEmitter FMODEmitter;
         
-        public float throwImpulse = 1000f; 
+        [SerializeField] private float throwImpulse = 200f; 
         private bool effectsInvalidated = true;
-        private Rigidbody rb; 
+        private Rigidbody rb;
+        private RespawnManager resp;
 
         public int capacity = 5;
         
@@ -32,6 +33,7 @@ namespace Inventory
 
         public void Start(){
             rb = GetComponent<Rigidbody>(); 
+            resp = GetComponent<RespawnManager>();
         }
 
 
@@ -131,9 +133,18 @@ namespace Inventory
             
             if (dropped is not null){
                 if(dropped.TryGetComponent<Rigidbody>(out Rigidbody itemrb)){
-                    itemrb.velocity = rb.velocity;
+                    if(dropped.TryGetComponent<GroundItem>(out GroundItem itemscript))
+                    {
+                        itemscript.setFlying(false);
+                    }
+                    if(dropped.TryGetComponent<RespawnManager>(out RespawnManager manager))
+                    {
+                        manager.setRespawnPoint(resp.getRespawnPoint());
+                    }
+                    //itemrb.velocity = rb.velocity;
                     itemrb.AddForce(transform.forward * throwImpulse, ForceMode.Impulse);
                     FMODUnity.RuntimeManager.PlayOneShot(dropSound,transform.position);
+
                 }
             }
 
